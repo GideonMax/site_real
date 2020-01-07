@@ -1,0 +1,37 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="main.master.cs" Inherits="site_real.main" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <link type="text/css" href="css/main.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="main" runat="server">
+    <h1>World Viewer</h1> <asp:HyperLink ID="AdminControlsLink" Visible="false" NavigateUrl="~/AdminControls.aspx" runat="server" />
+    <nav>
+        <ul>
+            <li><a href="Default.aspx">main page</a></li>
+            <li>
+		        <asp:HyperLink ID="LoginLink" runat="server" Text="Log in" NavigateUrl="~/Login.aspx" />
+		        <asp:Label ID="GreetingLabel" runat="server" />
+            </li>
+            <li>
+                <asp:LinkButton ID="LogoutLink" Text="Log out" Visible="false" runat="server" OnClick="Logout" />
+                <asp:HyperLink ID="JoinLink" runat="server" Text="Join" NavigateUrl="~/Join.aspx" />
+            </li>
+            <li>
+                <asp:HyperLink Text="World Viewer" NavigateUrl="~/interactive.aspx" runat="server" />
+            </li>
+        </ul>
+    </nav>
+    <div>
+        <asp:ContentPlaceHolder ID="Body" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

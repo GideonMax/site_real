@@ -1,0 +1,29 @@
+﻿nav ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    border: thin solid tomato;
+    flex: 1;
+}
+
+nav li a:link,nav li span {
+    padding:0.5em;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+
+nav li a:hover {
+    background-color: orange;
+    color: darkblue;
+}
+
+body{
+    margin-left:10%;
+    margin-right:10%;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

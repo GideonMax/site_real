@@ -1,0 +1,9 @@
+﻿div.buttons{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-evenly;
+}
+.article{
+    align-self:stretch;
+    text-align:center;
+}
