@@ -101,6 +101,11 @@ namespace site_real.App_Code
             cmd.Parameters.AddWithValue("@value", value);
             cmd.ExecuteNonQuery();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public bool isAdmin(int index)
         {
             string command = "SELECT [is_admin] FROM[Users] WHERE [ID]=?";
