@@ -52,10 +52,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -84,6 +80,7 @@
     <Content Include="AdminControls.aspx" />
     <Content Include="App_Data\Database.accdb" />
     <Content Include="css\interactive.css" />
+    <Content Include="css\join.css" />
     <Content Include="css\login.css" />
     <Content Include="css\main.css" />
     <Content Include="css\default.css" />
