@@ -6,26 +6,28 @@
 }
 
 nav li {
-    border: thin solid tomato;
     height:2.4em;
+    border: thick solid black;
     flex: 1;
 }
 
 nav li a:link,nav li span {
-    padding:0.4em;
-    height:auto;
     display: block;
     text-align: center;
     text-decoration: none;
 }
 
-nav li a:hover {
-    background-color: orange;
-    color: darkblue;
-}
+    nav li a:hover {
+        background: lightskyblue;
+        color: black;
+        box-shadow: 2px 2px 6px 1px black inset;
+    }
 
-body{
-    margin-left:10%;
-    margin-right:10%;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+body {
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: silver;
+    box-shadow: 0 1em 1em -.6em black;
+    background-image: url(http://eskipaper.com/images/world-map-wallpaper-8.jpg)
 }

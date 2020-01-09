@@ -1,3 +1,8 @@
 ﻿body {
-    background: silver;
+}
+
+form {
+    align-self: stretch;
+    text-align: center;
+    background-color: lightskyblue;
 }

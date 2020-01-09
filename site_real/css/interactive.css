@@ -1,9 +1,19 @@
-﻿div.buttons{
+﻿body {
+}
+
+div.buttons{
     display:flex;
     flex-direction:row;
     justify-content:space-evenly;
 }
+
 .article{
     align-self:stretch;
     text-align:center;
+}
+
+form {
+    align-self: stretch;
+    text-align: center;
+    background-attachment: fixed;
 }
