@@ -7,5 +7,5 @@
         <asp:PlaceHolder runat="server" ID="buttons" />
     </div>
     <br />
-    <asp:Label ID="article" Text="" runat="server" CssClass="article" />
+    <asp:Literal  ID="article" runat="server" />
 </asp:Content>

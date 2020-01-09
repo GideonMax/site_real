@@ -36,7 +36,9 @@ namespace site_real
             using(DBHandler db = new DBHandler())
             {
                 string articletext = db.GetArticleByCountryName(country);
+                articletext= articletext.Replace("\n", "<br>");
                 article.Text = articletext;
+                Console.WriteLine(articletext);
             }
         }
     }
