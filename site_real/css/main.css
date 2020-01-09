@@ -7,11 +7,13 @@
 
 nav li {
     border: thin solid tomato;
+    height:2.4em;
     flex: 1;
 }
 
 nav li a:link,nav li span {
-    padding:0.5em;
+    padding:0.4em;
+    height:auto;
     display: block;
     text-align: center;
     text-decoration: none;
