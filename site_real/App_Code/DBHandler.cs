@@ -93,6 +93,11 @@ namespace site_real.App_Code
             cmd.Parameters.AddWithValue("@key", key);
             cmd.ExecuteNonQuery();
         }
+        /// <summary>
+        /// adds a new data pair to the database
+        /// </summary>
+        /// <param name="key">the pair's key</param>
+        /// <param name="value">the pair's value</param>
         public void addData(string key, string value)
         {
             string command = "INSERT INTO [Data] ([key],[value]) VALUES(@key,@value)";
