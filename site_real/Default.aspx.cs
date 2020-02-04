@@ -14,7 +14,7 @@ namespace site_real
         {
             using(DBHandler db = new DBHandler())
             {
-                string text= db.getText("main");
+                string text= db.GetText("main");
                 var paragraph = new LiteralControl(text);
                 texttest.Controls.Add(paragraph);
             }

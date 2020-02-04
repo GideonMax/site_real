@@ -24,8 +24,8 @@ namespace site_real
             {
                 using(DBHandler db = new DBHandler())
                 {
-                    bool is_admin = admin_code.Text == db.getData("admin_key");
-                    int id = db.adduser(u_name.Text, u_password.Text, is_admin);
+                    bool is_admin = admin_code.Text == db.GetData("admin_key");
+                    int id = db.Adduser(u_name.Text, u_password.Text, is_admin);
                     if (id == 0)
                     {
                         message.Text = "user name or password already exist";
