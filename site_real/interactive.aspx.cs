@@ -20,7 +20,6 @@ namespace site_real
                     foreach (var name in names)
                     {
                         var button = new Button();
-
                         button.Click += (object send, EventArgs args) =>
                         {
                             Load_Article(name);

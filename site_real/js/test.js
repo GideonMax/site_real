@@ -1,3 +1,3 @@
-﻿$.get("api/CountryInfo/de", (data, status) => {
+﻿$.get("api/de", (data, status) => {
     console.log(data);
 })

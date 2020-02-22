@@ -16,7 +16,7 @@ namespace site_real
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/{id}",
                 defaults: new { id = RouteParameter.Optional },
                 constraints:null,
                 handler: new CountryInfo()
