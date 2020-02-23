@@ -14,13 +14,12 @@ namespace site_real
         {
             using(DBHandler db = new DBHandler())
             {
-                string[] names = db.get_all_country_names();
+                string[] names = db.GetAllCountryNames();
                 if (names != null)
                 {
                     foreach (var name in names)
                     {
                         var button = new Button();
-
                         button.Click += (object send, EventArgs args) =>
                         {
                             Load_Article(name);

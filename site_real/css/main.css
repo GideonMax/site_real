@@ -11,17 +11,18 @@ nav li {
     flex: 1;
 }
 
-nav li a:link,nav li span {
+nav li a:link,
+nav li span {
     display: block;
     text-align: center;
     text-decoration: none;
 }
 
-    nav li a:hover {
-        background: lightskyblue;
-        color: black;
-        box-shadow: 2px 2px 6px 1px black inset;
-    }
+nav li a:hover {
+    background: lightskyblue;
+    color: black;
+    box-shadow: 2px 2px 6px 1px black inset;
+}
 
 body {
     margin-left: 10%;
