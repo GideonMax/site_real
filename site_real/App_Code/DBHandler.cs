@@ -182,6 +182,35 @@ namespace site_real.App_Code
             cmd.Dispose();
             return names;
         }
+        public string[] GetAllCountryCodes()
+        {
+            int amount = 0;
+            string command = "SELECT COUNT(*) as[amount] FROM [countries]";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    amount = (int)reader["amount"];
+                }
+            }
+            cmd.Dispose();
+            if (amount == 0) return null;
+            int index = 0;
+            string[] names = new string[amount];
+            command = "SELECT [code] FROM [countries]";
+            cmd = new OleDbCommand(command, Con);
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    names[index] = reader["code"].ToString();
+                    index++;
+                }
+            }
+            cmd.Dispose();
+            return names;
+        }
         public string GetArticleByCountryName(string name)
         {
             string command = "SELECT [article] FROM [countries] WHERE [country_name]=@Name";
