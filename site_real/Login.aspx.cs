@@ -18,7 +18,7 @@ namespace site_real
         {
             using(DBHandler db = new DBHandler())
             {
-                int a = db.getuser(u_name.Text, u_password.Text);
+                int a = db.GetUser(u_name.Text, u_password.Text);
                 if (a == 0)
                 {
                     Message.Text = "username or password wrong";
@@ -27,7 +27,7 @@ namespace site_real
                 {
                     Session["user_id"] = a;
                     Session["user_name"] = u_name.Text;
-                    Session["is_admin"] = db.isAdmin(a);
+                    Session["is_admin"] = db.IsAdmin(a);
                     Message.Text = "logged in successfully";
                 }
             }
