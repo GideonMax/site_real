@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Web.Http;
 using site_real.App_Code;
+using Newtonsoft.Json;
 
 namespace site_real
 {
@@ -15,27 +16,57 @@ namespace site_real
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage message, CancellationToken token)
         {
-            Console.WriteLine("yes");
-            string article = null;
-            using(DBHandler db = new DBHandler())
+            HttpResponseMessage response = new HttpResponseMessage();
+            Console.WriteLine(message.RequestUri.LocalPath);
+            
+            var parsedUri = message.RequestUri.LocalPath.Split('/');
+            switch (parsedUri[2])
             {
-                var parsedUri = message.RequestUri.OriginalString.Split('/');
-                article = db.GetArticleByCountryCode(parsedUri[parsedUri.Length-1] );
-            }
-            HttpResponseMessage response;
-            if (article != null)
-            {
-                response = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(article)
-                };
-            }
-            else
-            {
-                response = new HttpResponseMessage(HttpStatusCode.SeeOther)
-                {
-                    Content = null
-                };
+                case "get":
+                    string article = null;
+                    using (DBHandler db = new DBHandler())
+                    {
+                        article = db.GetArticleByCountryCode(parsedUri[parsedUri.Length - 1]);
+                    }
+                    if (article != null)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = new StringContent(article)
+                        };
+                    }
+                    else
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.SeeOther)
+                        {
+                            Content = null
+                        };
+                    }
+                    break;
+                case "getall":
+                    using( DBHandler db = new DBHandler())
+                    {
+                        string[] names = db.GetAllCountryNames();
+                        HttpContent content = new StringContent(JsonConvert.SerializeObject(names));
+                        content.Headers.ContentType.MediaType = "application/json";
+                        response = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = content
+                        };
+                    }
+                break;
+                case "getcodes":
+                    using (DBHandler db = new DBHandler())
+                    {
+                        string[] names = db.GetAllCountryCodes();
+                        HttpContent content = new StringContent(JsonConvert.SerializeObject(names));
+                        content.Headers.ContentType.MediaType = "application/json";
+                        response = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = content
+                        };
+                    }
+                    break;
             }
             TaskCompletionSource<HttpResponseMessage> task = new TaskCompletionSource<HttpResponseMessage>();
             task.SetResult(response);

@@ -15,10 +15,17 @@ namespace site_real
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{id}",
+                name: "countryApi1",
+                routeTemplate: "country/{id}",
                 defaults: new { id = RouteParameter.Optional },
                 constraints:null,
+                handler: new CountryInfo()
+            );
+            config.Routes.MapHttpRoute(
+                name: "countryApi2",
+                routeTemplate: "country/{id}/{yes}",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
                 handler: new CountryInfo()
             );
         }
