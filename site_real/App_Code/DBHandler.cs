@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Data.Common;
 using System.Data.OleDb;
 
-namespace site_real.App_Code
+namespace site_real
 {
     public class DBHandler : IDisposable
     {
@@ -14,12 +14,21 @@ namespace site_real.App_Code
         {
             string cs = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
             Con = new OleDbConnection(cs);
+            Con.InfoMessage += Con_InfoMessage;
             Con.Open();
         }
+
+        private void Con_InfoMessage(object sender, OleDbInfoMessageEventArgs e)
+        {
+            Console.WriteLine("oh no");
+        }
+
         public void Dispose()
         {
+            Con.Close();
             Con.Dispose();
         }
+        #region users
         /// <summary>
         /// This method returns a user's ID given a username
         /// </summary>
@@ -31,11 +40,11 @@ namespace site_real.App_Code
             OleDbCommand command = new OleDbCommand(cmd, Con);
             command.Parameters.AddWithValue("", name);
             int ret = 0;
-            using(OleDbDataReader reader = command.ExecuteReader())
+            using (OleDbDataReader reader = command.ExecuteReader())
             {
                 if (reader.Read())
                 {
-                    ret= (int)reader["ID"];
+                    ret = (int)reader["ID"];
                 }
             }
             command.Dispose();
@@ -58,10 +67,115 @@ namespace site_real.App_Code
             {
                 if (reader.Read())
                 {
-                    ret= (int)reader["ID"];
+                    ret = (int)reader["ID"];
                 }
             }
             command.Dispose();
+            return ret;
+        }
+        /// <summary>
+        /// Given the ID of a user, this function checks if they are an admin.
+        /// </summary>
+        /// <param name="index">The user's ID which you can get using GetUser</param>
+        /// <returns>Is the user an admin.</returns>
+        public bool IsAdmin(int index)
+        {
+            string command = "SELECT [is_admin] FROM[Users] WHERE [ID]=?";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("", index);
+            bool ret = false;
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    ret = (bool)reader["is_admin"];
+                }
+            }
+            cmd.Dispose();
+            return ret;
+        }
+        /// <summary>
+        /// Adds a new user to the database, and returns their ID;
+        /// </summary>
+        /// <param name="name">The user's name</param>
+        /// <param name="password">The user's password</param>
+        /// <param name="is_admin">Is the user an admin</param>
+        /// <returns>The user's ID</returns>
+        public int Adduser(string name, string password, bool is_admin = false)
+        {
+            if (GetUser(name) != 0 || CheckPassword(password))
+            {
+                return 0;
+            }
+            string command = "INSERT INTO [Users] ([user_name],[user_password],[is_admin])"
+                + " VALUES (@u_name,@u_password,@is_admin);";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("@u_name", name);
+            cmd.Parameters.AddWithValue("@u_password", password);
+            cmd.Parameters.AddWithValue("@is_admin", is_admin);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cmd = new OleDbCommand("SELECT @@IDENTITY", Con);
+            int ret = (int)cmd.ExecuteScalar();
+            cmd.Dispose();
+            return ret;
+        }
+        /// <summary>
+        /// Checks if a password already exists, returns true if it does and false if it does not.
+        /// </summary>
+        /// <param name="password">The password to check</param>
+        /// <returns>Does the password already exist</returns>
+        public bool CheckPassword(string password)
+        {
+            string command = "SELECT COUNT(*) AS [amount] FROM [Users] WHERE [user_password]=?;";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("", password);
+            bool ret = false;
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    ret = (int)reader["amount"] != 0;
+                }
+            }
+            cmd.Dispose();
+            return ret;
+        }
+        #endregion
+        #region data
+        /// <summary>
+        /// Lets you get Data using indexing.<br></br>
+        /// for example:
+        /// <code>string AdminKey = db.Data["admin_key"];</code><br></br>
+        /// <code>db.Data["something important idk"] = "noooooo";</code>
+        /// </summary>
+        public IndexedProperty<string,string> Data
+        {
+            get
+            {
+                return new IndexedProperty<string, string>(
+                    key => GetData(key),
+                    (string key, string value) => { SetData(key, value); }
+                    );
+            }
+        }
+
+
+        public bool DoesDataKeyExist(string key)
+        {
+
+            string command = "SELECT COUNT(*) AS [amount] FROM [Data] WHERE [key]=@Key;";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("@Key", key);
+            bool ret = false;
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    ret = (int)reader["amount"] != 0;
+                }
+            }
+            cmd.Dispose();
             return ret;
         }
         /// <summary>
@@ -69,29 +183,34 @@ namespace site_real.App_Code
         /// </summary>
         /// <param name="key">the key</param>
         /// <returns>the requested data</returns>
-        public string GetData(string key)
+        string GetData(string key)
         {
+            if (!DoesDataKeyExist(key)) return null;
             string command = "SELECT [value] FROM [Data] WHERE [key]=@key";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@key", key);
             string ret = null;
-            using(OleDbDataReader reader = cmd.ExecuteReader())
+            using (OleDbDataReader reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
                 {
-                    ret= (string)reader["value"];
+                    ret = (string)reader["value"];
                 }
             }
             cmd.Dispose();
             return ret;
         }
         /// <summary>
-        /// this function sets a key's value
+        /// This function sets a key's value.
         /// </summary>
-        /// <param name="key">the key</param>
-        /// <param name="value"></param>
-        public void SetData(string key, string value)
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
+        void SetData(string key, string value)
         {
+            if (DoesDataKeyExist(key))
+            {
+                AddData(key, value);
+            }
             string command = "UPDATE [Data] SET [value]=@value WHERE [key]=@key";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@value", value);
@@ -104,7 +223,7 @@ namespace site_real.App_Code
         /// </summary>
         /// <param name="key">the pair's key</param>
         /// <param name="value">the pair's value</param>
-        public void AddData(string key, string value)
+        void AddData(string key, string value)
         {
             string command = "INSERT INTO [Data] ([key],[value]) VALUES(@key,@value)";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -113,46 +232,134 @@ namespace site_real.App_Code
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
+        #endregion
+        #region countries
+
         /// <summary>
-        /// 
+        /// Lets you get a country's CountryInfo using indexing.<br></br>
+        /// for example:
+        /// <code>CountryInfo America = db.Countries["US"];</code><br></br>
+        /// <code>db.Countries["ILS"] = SomeFunctionOrSomethingThatReturnsACountryInfo();;</code>
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public bool IsAdmin(int index)
+        public IndexedProperty<string, CountryInfo> Countries
         {
-            string command = "SELECT [is_admin] FROM[Users] WHERE [ID]=?";
+            get
+            {
+                return new IndexedProperty<string, CountryInfo>(
+                    (string code) => { return GetCountryInfoByCode(code); },
+                    (string code, CountryInfo info) => { SetCountryInfoByCode(code, info); }
+                    );
+            }
+        }
+
+
+        public bool DoesCountryExist(string code)
+        {
+            string command = "SELECT COUNT(*) AS [amount] FROM [countries] WHERE [code]=?;";
             OleDbCommand cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("", index);
+            cmd.Parameters.AddWithValue("", code);
             bool ret = false;
             using (DbDataReader reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
                 {
-                    ret= (bool)reader["is_admin"];
+                    ret = (int)reader["amount"] != 0;
                 }
             }
             cmd.Dispose();
             return ret;
         }
-        public int Adduser(string name,string password,bool is_admin=false)
+        CountryInfo GetCountryInfoByCode(string code)
         {
-            if (GetUser(name) != 0 || CheckPassword(password))
-            {
-                return 0;
-            }
-            string command = "INSERT INTO [Users]([user_name],[user_password],[is_admin])"
-                +" VALUES (@u_name,@u_password,@is_admin);";
+            if (!DoesCountryExist(code)) return null;
+            CountryInfo info = new CountryInfo();
+            string command = "SELECT [article] FROM [countries] WHERE [code]=@Name";
             OleDbCommand cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("@u_name", name);
-            cmd.Parameters.AddWithValue("@u_password", password);
-            cmd.Parameters.AddWithValue("@is_admin", is_admin);
+            cmd.Parameters.AddWithValue("@Name", code);
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    info.OfficialArticle= reader["article"].ToString().Replace("\n","<br>");
+                }
+            }
+            cmd.Dispose();
+            command = "SELECT [user_article] FROM [countries] WHERE [code]=@Name";
+            cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("@Name", code);
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    info.UserArticle = reader["user_article"].ToString().Replace("\n", "<br>");
+                }
+            }
+            cmd.Dispose();
+            command = "SELECT [country_name] FROM [countries] WHERE [code]=@Name";
+            cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("@Name", code);
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    info.CountryName= reader["country_name"].ToString();
+                }
+            }
+            cmd.Dispose();
+            return info;
+        }
+        void SetCountryInfoByCode(string code, CountryInfo info)
+        {
+            if (!DoesCountryExist(code))
+            {
+                AddCountryInfoByCode(code, info);
+                return;
+            }
+            if (info.OfficialArticle != null)
+            {
+                string command = "UPDATE [countries] SET [article]=@Article WHERE [code]=@Code;";
+                OleDbCommand cmd = new OleDbCommand(command, Con);
+                cmd.Parameters.AddWithValue("@Code", code);
+                cmd.Parameters.AddWithValue("@Article", info.OfficialArticle);
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+            }
+            if (info.UserArticle != null)
+            {
+                string command = "UPDATE [countries] SET [user_article]=@Article WHERE [code]=@Code;";
+                OleDbCommand cmd = new OleDbCommand(command, Con);
+                cmd.Parameters.AddWithValue("@Code", code);
+                cmd.Parameters.AddWithValue("@Article", info.OfficialArticle);
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+            }
+
+
+        }
+        void AddCountryInfoByCode(string code, CountryInfo info)
+        {
+            string command = "INSERT INTO [countries] ([code],[country_name],[article],[user_article])" +
+                " VALUES (@Code,@Name,@Article,@UserArticle);";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("@Code", code);
+            cmd.Parameters.AddWithValue("@Name",info.CountryName);
+            cmd.Parameters.AddWithValue("@Article", info.OfficialArticle);
+            cmd.Parameters.AddWithValue("@UserArticle", info.UserArticle);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-            cmd = new OleDbCommand("SELECT @@IDENTITY", Con);
-            int ret= (int)cmd.ExecuteScalar();
-            cmd.Dispose();
-            return ret;
+            return;
         }
+
+
+
+
+
+
+        /// <summary>
+        /// Returns all the country names according to the database.
+        /// Not reccomended.
+        /// </summary>
+        /// <returns>All the names</returns>
         public string[] GetAllCountryNames()
         {
             int amount = 0;
@@ -182,6 +389,10 @@ namespace site_real.App_Code
             cmd.Dispose();
             return names;
         }
+        /// <summary>
+        /// Returns all the country codes listed in our database.
+        /// </summary>
+        /// <returns></returns>
         public string[] GetAllCountryCodes()
         {
             int amount = 0;
@@ -211,6 +422,12 @@ namespace site_real.App_Code
             cmd.Dispose();
             return names;
         }
+        /// <summary>
+        /// Deprecated.
+        /// Gets a country's article by its name.
+        /// </summary>
+        /// <param name="name">The country's name</param>
+        /// <returns>The country's article</returns>
         public string GetArticleByCountryName(string name)
         {
             string command = "SELECT [article] FROM [countries] WHERE [country_name]=@Name";
@@ -227,6 +444,12 @@ namespace site_real.App_Code
             cmd.Dispose();
             return ret;
         }
+        /// <summary>
+        /// Deprecated.
+        /// Gets a country's article given its code.
+        /// </summary>
+        /// <param name="name">The country's code</param>
+        /// <returns>its article</returns>
         public string GetArticleByCountryCode(string name)
         {
             string command = "SELECT [article] FROM [countries] WHERE [code]=@Name";
@@ -244,31 +467,45 @@ namespace site_real.App_Code
             ret = ret.Replace("\n", "<br>");
             return ret;
         }
-        public bool CheckPassword(string password)
+        #endregion
+        #region text
+        /// <summary>
+        /// Lets you get a text using indexing.<br></br>
+        /// for example:
+        /// <code>string MainText = db.Texts["main"];</code><br></br>
+        /// <code>db.Texts["main"] = "this is an example";</code>
+        /// </summary>
+        public IndexedProperty<string,string> Texts
         {
-            string command = "SELECT COUNT(*) AS [amount] FROM [Users] WHERE [user_password]=?;";
-            OleDbCommand cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("", password);
-            bool ret=false;
-            using(DbDataReader reader = cmd.ExecuteReader())
+            get
             {
-                if(reader.Read())
+                return new IndexedProperty<string, string>(
+                    key => GetText(key),
+                    (key, value) => { SetText(key, value); }
+                    );
+            }
+        }
+
+        public bool DoesTextExist(string key)
+        {
+            string command = "SELECT COUNT(*) AS [amount] FROM [Texts] WHERE [key]=@Key;";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("@Key", key);
+            bool ret = false;
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
                 {
-                    if( (int)reader["amount"]==0)
-                    {
-                        ret= false;
-                    }
-                    else
-                    {
-                        ret= true;
-                    }
+                    ret = (int)reader["amount"] != 0;
                 }
             }
             cmd.Dispose();
             return ret;
         }
+
         public string GetText(string key)
         {
+            if (!DoesTextExist(key)) return null;
             string command = "SELECT [_text] FROM [Texts] WHERE [key]=@key";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@key", key);
@@ -285,6 +522,11 @@ namespace site_real.App_Code
         }
         public void SetText(string key, string value)
         {
+            if (!DoesTextExist(key))
+            {
+                AddText(key, value);
+                return;
+            }
             string command = "UPDATE [Texts] SET [_text]=@value WHERE [key]=@key";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@value", value);
@@ -301,6 +543,7 @@ namespace site_real.App_Code
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
+        #endregion
     }
 
     /// <summary>

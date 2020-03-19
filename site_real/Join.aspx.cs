@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using site_real.App_Code;
 
 namespace site_real
 {
@@ -24,7 +23,7 @@ namespace site_real
             {
                 using(DBHandler db = new DBHandler())
                 {
-                    bool is_admin = admin_code.Text == db.GetData("admin_key");
+                    bool is_admin = admin_code.Text == db.Data["admin_key"];
                     int id = db.Adduser(u_name.Text, u_password.Text, is_admin);
                     if (id == 0)
                     {

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using site_real.App_Code;
 
 namespace site_real
 {
@@ -14,7 +13,7 @@ namespace site_real
         {
             using(DBHandler db = new DBHandler())
             {
-                string text= db.GetText("main");
+                string text = db.Texts["main"];
                 var paragraph = new LiteralControl(text);
                 texttest.Controls.Add(paragraph);
             }
