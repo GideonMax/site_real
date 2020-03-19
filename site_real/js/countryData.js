@@ -6,29 +6,30 @@
  * 
  * */
 function getAllCountryNames() {
-    return new Promise((resolve, reject) => {
-        $.get("/country/getall", (data, status) => {
-            resolve(data);
-        });
-    });
+    return fetch("/country/getall").then(res => res.json());
 }
+
+
+function getAllCountryCodes() {
+    return fetch("/country/getcodes").then(res => res.json());
+}
+
+
 /**
  * 
  * @param {string} Code
- * @returns {Promise<string>} 
+ * @returns {Promise<object>} 
  */
-function getCountryArticle(Code) {
-    return new Promise((resolve, reject) => {
-        $.get("/country/get/" + Code, (data, status) => {
-            resolve(data);
-        });
-    });
+function getCountryData(Code) {
+    return fetch(`/country/get/${Code}`).then(res => res.json());
 }
 
-function getAllCountryCodes() {
-    return new Promise((resolve, reject) => {
-        $.get("/country/getcodes", (data, status) => {
-            resolve(data);
-        });
+function setCountryData(Code, Data) {
+    return fetch(`/country/set/${Code}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(Data)
     });
 }
