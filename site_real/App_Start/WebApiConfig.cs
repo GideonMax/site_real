@@ -19,14 +19,14 @@ namespace site_real
                 routeTemplate: "country/{id}",
                 defaults: new { id = RouteParameter.Optional },
                 constraints:null,
-                handler: new CountryInfo()
+                handler: new CountryInfoHandler()
             );
             config.Routes.MapHttpRoute(
                 name: "countryApi2",
                 routeTemplate: "country/{id}/{yes}",
                 defaults: new { id = RouteParameter.Optional },
                 constraints: null,
-                handler: new CountryInfo()
+                handler: new CountryInfoHandler()
             );
         }
     }

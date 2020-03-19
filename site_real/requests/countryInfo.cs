@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace site_real
 {
-    public class CountryInfo : HttpMessageHandler
+    public class CountryInfoHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage message, CancellationToken token)
         {

@@ -302,4 +302,15 @@ namespace site_real.App_Code
             cmd.Dispose();
         }
     }
+
+    /// <summary>
+    /// This class contains information about a certain country:
+    /// including its name, official article written by admins and a user article written by users.
+    /// </summary>
+    public class CountryInfo
+    {
+        public string CountryName = null;
+        public string OfficialArticle = null;
+        public string UserArticle = null;
+    } 
 }
