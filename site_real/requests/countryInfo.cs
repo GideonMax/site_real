@@ -61,18 +61,14 @@ namespace site_real
             }
             else if (message.Method.Method == "POST")
             {
-                switch (parsedUri[2])
+                string body = await message.Content.ReadAsStringAsync();
+                CountryInfo info = JsonConvert.DeserializeObject<CountryInfo>(body);
+                if (parsedUri[2] != "setadmin") info.OfficialArticle = null;
+                using (DBHandler db = new DBHandler())
                 {
-                    case "set":
-                        string body = await message.Content.ReadAsStringAsync();
-                        CountryInfo info = JsonConvert.DeserializeObject<CountryInfo>(body);
-                        using (DBHandler db = new DBHandler())
-                        {
-                            db.Countries[parsedUri[3]] = info;
-                        }
-                        response = new HttpResponseMessage(HttpStatusCode.OK);
-                        break;
+                    db.Countries[parsedUri[3]] = info;
                 }
+                response = new HttpResponseMessage(HttpStatusCode.OK);
             }
 
             return response;

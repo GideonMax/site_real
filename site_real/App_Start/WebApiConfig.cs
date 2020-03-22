@@ -28,6 +28,13 @@ namespace site_real
                 constraints: null,
                 handler: new CountryInfoHandler()
             );
+            config.Routes.MapHttpRoute(
+                name: "TextApi",
+                routeTemplate: "text/{id}",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
+                handler: new TextRequestHandler()
+            );
         }
     }
 }

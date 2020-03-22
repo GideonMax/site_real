@@ -9,7 +9,9 @@ function getAllCountryNames() {
     return fetch("/country/getall").then(res => res.json());
 }
 
-
+/**
+ * @returns {Promise<string[]>}
+ */
 function getAllCountryCodes() {
     return fetch("/country/getcodes").then(res => res.json());
 }
