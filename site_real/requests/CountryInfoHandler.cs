@@ -21,11 +21,21 @@ namespace site_real
                 switch (parsedUri[2])
                 {
                     case "get":
+                        using (OutPutFile f = new OutPutFile()) f.WriteLine("country get");
                         CountryInfo info = null;
                         using (DBHandler db = new DBHandler())
                         {
-                            info = db.Countries[parsedUri[3]];
+                            if (db.DoesCountryExist(parsedUri[3]))
+                            {
+                                info = db.Countries[parsedUri[3]];
+                            }
+                            else
+                            {
+                                info = null;
+                            }
                         }
+                        using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(message.RequestUri.LocalPath));
+                        using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(info,Formatting.Indented));
                         content = new StringContent(JsonConvert.SerializeObject(info));
                         content.Headers.ContentType.MediaType = "application/json";
                         response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -37,6 +47,7 @@ namespace site_real
                         using (DBHandler db = new DBHandler())
                         {
                             string[] names = db.GetAllCountryNames();
+                            using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(names));
                             content = new StringContent(JsonConvert.SerializeObject(names));
                             content.Headers.ContentType.MediaType = "application/json";
                             response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -46,9 +57,10 @@ namespace site_real
                         }
                         break;
                     case "getcodes":
-                        using (DBHandler db = new DBHandler())
+                        using (DBHandler db1 = new DBHandler())
                         {
-                            string[] names = db.GetAllCountryCodes();
+                            string[] names = db1.GetAllCountryCodes();
+                            using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(names));
                             content = new StringContent(JsonConvert.SerializeObject(names));
                             content.Headers.ContentType.MediaType = "application/json";
                             response = new HttpResponseMessage(HttpStatusCode.OK)

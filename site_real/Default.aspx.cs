@@ -11,12 +11,12 @@ namespace site_real
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            using(DBHandler db = new DBHandler())
+            /*using(DBHandler db = new DBHandler())
             {
                 string text = db.Texts["main"];
                 var paragraph = new LiteralControl(text);
                 texttest.Controls.Add(paragraph);
-            }
+            }*/
         }
     }
 }

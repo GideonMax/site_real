@@ -15,18 +15,26 @@ namespace site_real
             string cs = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
             Con = new OleDbConnection(cs);
             Con.InfoMessage += Con_InfoMessage;
+            Con.StateChange += Con_StateChange;
             Con.Open();
+        }
+
+        private void Con_StateChange(object sender, System.Data.StateChangeEventArgs e)
+        {
+            //Console.WriteLine("hello");
         }
 
         private void Con_InfoMessage(object sender, OleDbInfoMessageEventArgs e)
         {
-            Console.WriteLine("oh no");
+            Console.WriteLine("con infomessage");
         }
 
         public void Dispose()
         {
+            
             Con.Close();
             Con.Dispose();
+            Console.WriteLine("db.dispose");
         }
         #region users
         /// <summary>

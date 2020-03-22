@@ -17,12 +17,12 @@ namespace site_real
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage message, CancellationToken token)
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            Console.WriteLine(message.RequestUri.LocalPath);
 
             var parsedUri = message.RequestUri.LocalPath.Split('/');
             string TextName = parsedUri[2];
             if (message.Method.Method == "GET")
             {
+                using (OutPutFile f = new OutPutFile()) f.WriteLine("text get");
                 using (DBHandler db = new DBHandler())
                 {
                     string text = db.Texts[TextName];
@@ -34,6 +34,7 @@ namespace site_real
             }
             else if (message.Method.Method == "POST")
             {
+                using (OutPutFile f = new OutPutFile()) f.WriteLine("text post");
                 string text = await message.Content.ReadAsStringAsync();
                 using (DBHandler db = new DBHandler())
                 {

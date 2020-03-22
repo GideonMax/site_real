@@ -5,9 +5,9 @@
     constructor(){
         super();
         this.div=document.createElement('div');
-        this.appendChild(this.div);
     }
     connectedCallback(){
+        this.appendChild(this.div);
         var name = this.getAttribute('TextName');
         GetText(name).then(val=>{this.div.innerHTML=val});
     }
