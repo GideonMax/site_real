@@ -78,8 +78,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminControls.aspx" />
-    <Content Include="js\countryData.js" />
-    <Content Include="js\test.js" />
+    <Content Include="js\countryData.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\countryDataAdmin.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\DBTextWC.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\test.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\Database.accdb" />
     <Content Include="css\interactive.css" />
     <Content Include="css\join.css" />
@@ -90,6 +100,12 @@
     <Content Include="Global.asax" />
     <Content Include="interactive.aspx" />
     <Content Include="Join.aspx" />
+    <Content Include="js\TextRequestApi.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\TextRequestApiAdmin.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Login.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
