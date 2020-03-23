@@ -22,6 +22,11 @@ namespace site_real
         public static void Close()
         {
             AmountOfConnections--;
+            if (AmountOfConnections < 0)
+            {
+                AmountOfConnections = 0;
+                return;
+            }
             if (AmountOfConnections == 0)
             {
                 _close();
