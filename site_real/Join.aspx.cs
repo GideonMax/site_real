@@ -21,10 +21,9 @@ namespace site_real
             }
             else
             {
-                using(DBHandler db = new DBHandler())
-                {
-                    bool is_admin = admin_code.Text == db.Data["admin_key"];
-                    int id = db.Adduser(u_name.Text, u_password.Text, is_admin);
+                DBHandler.Open();
+                    bool is_admin = admin_code.Text == DBHandler.Data["admin_key"];
+                    int id = DBHandler.Adduser(u_name.Text, u_password.Text, is_admin);
                     if (id == 0)
                     {
                         message.Text = "user name or password already exist";
@@ -36,7 +35,7 @@ namespace site_real
                         Session["user_id"] = id;
                         Session["is_admin"] = is_admin;
                     }
-                }
+                DBHandler.Close();
             }
         }
         public void Unnamed_CheckedChanged(object sender, EventArgs e)

@@ -22,24 +22,22 @@ namespace site_real
             string TextName = parsedUri[2];
             if (message.Method.Method == "GET")
             {
-                using (OutPutFile f = new OutPutFile()) f.WriteLine("text get");
-                using (DBHandler db = new DBHandler())
-                {
-                    string text = db.Texts[TextName];
+                //using (OutPutFile f = new OutPutFile()) f.WriteLine("text get");
+                DBHandler.Open();
+                    string text = DBHandler.Texts[TextName];
                     response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
                         Content = new StringContent(text)
                     };
-                }
+                DBHandler.Close();
             }
             else if (message.Method.Method == "POST")
             {
-                using (OutPutFile f = new OutPutFile()) f.WriteLine("text post");
+                //using (OutPutFile f = new OutPutFile()) f.WriteLine("text post");
                 string text = await message.Content.ReadAsStringAsync();
-                using (DBHandler db = new DBHandler())
-                {
-                    db.Texts[TextName] = text;
-                }
+                DBHandler.Open();
+                DBHandler.Texts[TextName] = text;
+                DBHandler.Close();
                 response = new HttpResponseMessage(HttpStatusCode.OK);
             }
             return response;

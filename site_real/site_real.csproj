@@ -78,9 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminControls.aspx" />
-    <Content Include="App_Data\output.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="js\countryData.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -21,21 +21,20 @@ namespace site_real
                 switch (parsedUri[2])
                 {
                     case "get":
-                        using (OutPutFile f = new OutPutFile()) f.WriteLine("country get");
+                        //using (OutPutFile f = new OutPutFile()) f.WriteLine("country get");
                         CountryInfo info = null;
-                        using (DBHandler db = new DBHandler())
-                        {
-                            if (db.DoesCountryExist(parsedUri[3]))
+                        DBHandler.Open();
+                            if (DBHandler.DoesCountryExist(parsedUri[3]))
                             {
-                                info = db.Countries[parsedUri[3]];
+                                info = DBHandler.Countries[parsedUri[3]];
                             }
                             else
                             {
                                 info = null;
                             }
-                        }
-                        using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(message.RequestUri.LocalPath));
-                        using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(info,Formatting.Indented));
+                        DBHandler.Close();
+                        //using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(message.RequestUri.LocalPath));
+                        //using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(info,Formatting.Indented));
                         content = new StringContent(JsonConvert.SerializeObject(info));
                         content.Headers.ContentType.MediaType = "application/json";
                         response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -44,30 +43,28 @@ namespace site_real
                         };
                         break;
                     case "getall":
-                        using (DBHandler db = new DBHandler())
-                        {
-                            string[] names = db.GetAllCountryNames();
-                            using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(names));
+                        DBHandler.Open();
+                            string[] names = DBHandler.GetAllCountryNames();
+                            //using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(names));
                             content = new StringContent(JsonConvert.SerializeObject(names));
                             content.Headers.ContentType.MediaType = "application/json";
                             response = new HttpResponseMessage(HttpStatusCode.OK)
                             {
                                 Content = content
                             };
-                        }
+                        DBHandler.Close();
                         break;
                     case "getcodes":
-                        using (DBHandler db1 = new DBHandler())
-                        {
-                            string[] names = db1.GetAllCountryCodes();
-                            using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(names));
-                            content = new StringContent(JsonConvert.SerializeObject(names));
+                        DBHandler.Open();
+                            string[] codes = DBHandler.GetAllCountryCodes();
+                            //using (OutPutFile f = new OutPutFile()) f.WriteLine(JsonConvert.SerializeObject(codes));
+                            content = new StringContent(JsonConvert.SerializeObject(codes));
                             content.Headers.ContentType.MediaType = "application/json";
                             response = new HttpResponseMessage(HttpStatusCode.OK)
                             {
                                 Content = content
                             };
-                        }
+                        DBHandler.Close();
                         break;
                 }
             }
@@ -76,10 +73,9 @@ namespace site_real
                 string body = await message.Content.ReadAsStringAsync();
                 CountryInfo info = JsonConvert.DeserializeObject<CountryInfo>(body);
                 if (parsedUri[2] != "setadmin") info.OfficialArticle = null;
-                using (DBHandler db = new DBHandler())
-                {
-                    db.Countries[parsedUri[3]] = info;
-                }
+                DBHandler.Open();
+                    DBHandler.Countries[parsedUri[3]] = info;
+                DBHandler.Close();
                 response = new HttpResponseMessage(HttpStatusCode.OK);
             }
 

@@ -7,34 +7,36 @@ using System.Data.OleDb;
 
 namespace site_real
 {
-    public class DBHandler : IDisposable
+    public static class DBHandler
     {
-        readonly OleDbConnection Con;
-        public DBHandler()
+        static OleDbConnection Con;
+        static int AmountOfConnections = 0;
+        public static void Open()
+        {
+            if (AmountOfConnections == 0)
+            {
+                _open();
+            }
+            AmountOfConnections++;
+        }
+        public static void Close()
+        {
+            AmountOfConnections--;
+            if (AmountOfConnections == 0)
+            {
+                _close();
+            }
+        }
+        static void _open()
         {
             string cs = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
             Con = new OleDbConnection(cs);
-            Con.InfoMessage += Con_InfoMessage;
-            Con.StateChange += Con_StateChange;
             Con.Open();
         }
-
-        private void Con_StateChange(object sender, System.Data.StateChangeEventArgs e)
+        static void _close()
         {
-            //Console.WriteLine("hello");
-        }
-
-        private void Con_InfoMessage(object sender, OleDbInfoMessageEventArgs e)
-        {
-            Console.WriteLine("con infomessage");
-        }
-
-        public void Dispose()
-        {
-            
             Con.Close();
             Con.Dispose();
-            Console.WriteLine("db.dispose");
         }
         #region users
         /// <summary>
@@ -42,7 +44,7 @@ namespace site_real
         /// </summary>
         /// <param name="name">the user's name</param>
         /// <returns>ID</returns>
-        public int GetUser(string name)
+        public static int GetUser(string name)
         {
             string cmd = "SELECT [ID] FROM [Users] WHERE [user_name]= ? AND [is_active]";
             OleDbCommand command = new OleDbCommand(cmd, Con);
@@ -64,7 +66,7 @@ namespace site_real
         /// <param name="name">the user's name</param>
         /// <param name="password">the user's password</param>
         /// <returns>ID</returns>
-        public int GetUser(string name, string password)
+        public static int GetUser(string name, string password)
         {
             string cmd = "SELECT [ID] FROM [Users] WHERE [is_active] AND [user_name]=@Name AND [user_password]=@Password";
             OleDbCommand command = new OleDbCommand(cmd, Con);
@@ -86,7 +88,7 @@ namespace site_real
         /// </summary>
         /// <param name="index">The user's ID which you can get using GetUser</param>
         /// <returns>Is the user an admin.</returns>
-        public bool IsAdmin(int index)
+        public static bool IsAdmin(int index)
         {
             string command = "SELECT [is_admin] FROM[Users] WHERE [ID]=?";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -109,7 +111,7 @@ namespace site_real
         /// <param name="password">The user's password</param>
         /// <param name="is_admin">Is the user an admin</param>
         /// <returns>The user's ID</returns>
-        public int Adduser(string name, string password, bool is_admin = false)
+        public static int Adduser(string name, string password, bool is_admin = false)
         {
             if (GetUser(name) != 0 || CheckPassword(password))
             {
@@ -133,7 +135,7 @@ namespace site_real
         /// </summary>
         /// <param name="password">The password to check</param>
         /// <returns>Does the password already exist</returns>
-        public bool CheckPassword(string password)
+        public static bool CheckPassword(string password)
         {
             string command = "SELECT COUNT(*) AS [amount] FROM [Users] WHERE [user_password]=?;";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -157,7 +159,7 @@ namespace site_real
         /// <code>string AdminKey = db.Data["admin_key"];</code><br></br>
         /// <code>db.Data["something important idk"] = "noooooo";</code>
         /// </summary>
-        public IndexedProperty<string,string> Data
+        public static IndexedProperty<string,string> Data
         {
             get
             {
@@ -169,7 +171,7 @@ namespace site_real
         }
 
 
-        public bool DoesDataKeyExist(string key)
+        public static bool DoesDataKeyExist(string key)
         {
 
             string command = "SELECT COUNT(*) AS [amount] FROM [Data] WHERE [key]=@Key;";
@@ -191,7 +193,7 @@ namespace site_real
         /// </summary>
         /// <param name="key">the key</param>
         /// <returns>the requested data</returns>
-        string GetData(string key)
+        static string GetData(string key)
         {
             if (!DoesDataKeyExist(key)) return null;
             string command = "SELECT [value] FROM [Data] WHERE [key]=@key";
@@ -213,7 +215,7 @@ namespace site_real
         /// </summary>
         /// <param name="key">The key</param>
         /// <param name="value">The value</param>
-        void SetData(string key, string value)
+        static void SetData(string key, string value)
         {
             if (DoesDataKeyExist(key))
             {
@@ -231,7 +233,7 @@ namespace site_real
         /// </summary>
         /// <param name="key">the pair's key</param>
         /// <param name="value">the pair's value</param>
-        void AddData(string key, string value)
+        static void AddData(string key, string value)
         {
             string command = "INSERT INTO [Data] ([key],[value]) VALUES(@key,@value)";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -249,7 +251,7 @@ namespace site_real
         /// <code>CountryInfo America = db.Countries["US"];</code><br></br>
         /// <code>db.Countries["ILS"] = SomeFunctionOrSomethingThatReturnsACountryInfo();;</code>
         /// </summary>
-        public IndexedProperty<string, CountryInfo> Countries
+        static public IndexedProperty<string, CountryInfo> Countries
         {
             get
             {
@@ -261,7 +263,7 @@ namespace site_real
         }
 
 
-        public bool DoesCountryExist(string code)
+        public static bool DoesCountryExist(string code)
         {
             string command = "SELECT COUNT(*) AS [amount] FROM [countries] WHERE [code]=?;";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -277,7 +279,7 @@ namespace site_real
             cmd.Dispose();
             return ret;
         }
-        CountryInfo GetCountryInfoByCode(string code)
+        static CountryInfo GetCountryInfoByCode(string code)
         {
             if (!DoesCountryExist(code)) return null;
             CountryInfo info = new CountryInfo();
@@ -316,7 +318,7 @@ namespace site_real
             cmd.Dispose();
             return info;
         }
-        void SetCountryInfoByCode(string code, CountryInfo info)
+        static void SetCountryInfoByCode(string code, CountryInfo info)
         {
             if (!DoesCountryExist(code))
             {
@@ -344,7 +346,7 @@ namespace site_real
 
 
         }
-        void AddCountryInfoByCode(string code, CountryInfo info)
+        static void AddCountryInfoByCode(string code, CountryInfo info)
         {
             string command = "INSERT INTO [countries] ([code],[country_name],[article],[user_article])" +
                 " VALUES (@Code,@Name,@Article,@UserArticle);";
@@ -368,7 +370,7 @@ namespace site_real
         /// Not reccomended.
         /// </summary>
         /// <returns>All the names</returns>
-        public string[] GetAllCountryNames()
+        public static string[] GetAllCountryNames()
         {
             int amount = 0;
             string command = "SELECT COUNT(*) as[amount] FROM [countries]";
@@ -401,7 +403,7 @@ namespace site_real
         /// Returns all the country codes listed in our database.
         /// </summary>
         /// <returns></returns>
-        public string[] GetAllCountryCodes()
+        public static string[] GetAllCountryCodes()
         {
             int amount = 0;
             string command = "SELECT COUNT(*) as[amount] FROM [countries]";
@@ -436,7 +438,7 @@ namespace site_real
         /// </summary>
         /// <param name="name">The country's name</param>
         /// <returns>The country's article</returns>
-        public string GetArticleByCountryName(string name)
+        public static string GetArticleByCountryName(string name)
         {
             string command = "SELECT [article] FROM [countries] WHERE [country_name]=@Name";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -458,7 +460,7 @@ namespace site_real
         /// </summary>
         /// <param name="name">The country's code</param>
         /// <returns>its article</returns>
-        public string GetArticleByCountryCode(string name)
+        public static string GetArticleByCountryCode(string name)
         {
             string command = "SELECT [article] FROM [countries] WHERE [code]=@Name";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -483,7 +485,7 @@ namespace site_real
         /// <code>string MainText = db.Texts["main"];</code><br></br>
         /// <code>db.Texts["main"] = "this is an example";</code>
         /// </summary>
-        public IndexedProperty<string,string> Texts
+        public static IndexedProperty<string,string> Texts
         {
             get
             {
@@ -494,7 +496,7 @@ namespace site_real
             }
         }
 
-        public bool DoesTextExist(string key)
+        public static bool DoesTextExist(string key)
         {
             string command = "SELECT COUNT(*) AS [amount] FROM [Texts] WHERE [key]=@Key;";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -511,7 +513,7 @@ namespace site_real
             return ret;
         }
 
-        public string GetText(string key)
+        public static string GetText(string key)
         {
             if (!DoesTextExist(key)) return null;
             string command = "SELECT [_text] FROM [Texts] WHERE [key]=@key";
@@ -528,7 +530,7 @@ namespace site_real
             cmd.Dispose();
             return ret;
         }
-        public void SetText(string key, string value)
+        public static void SetText(string key, string value)
         {
             if (!DoesTextExist(key))
             {
@@ -542,7 +544,7 @@ namespace site_real
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
-        public void AddText(string key, string value)
+        public static void AddText(string key, string value)
         {
             string command = "INSERT INTO [Texts] ([key],[_text]) VALUES(@key,@value)";
             OleDbCommand cmd = new OleDbCommand(command, Con);

@@ -11,9 +11,8 @@ namespace site_real
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            using(DBHandler db = new DBHandler())
-            {
-                string[] names = db.GetAllCountryNames();
+            DBHandler.Open();
+                string[] names = DBHandler.GetAllCountryNames();
                 if (names != null)
                 {
                     foreach (var name in names)
@@ -27,17 +26,16 @@ namespace site_real
                         buttons.Controls.Add(button);
                     }
                 }
-            }
+            DBHandler.Close();
         }
         void Load_Article(string country)
         {
-            using(DBHandler db = new DBHandler())
-            {
-                string articletext = db.GetArticleByCountryName(country);
-                articletext= articletext.Replace("\n", "<br>");
-                article.Text = articletext;
-                Console.WriteLine(articletext);
-            }
+            DBHandler.Open();
+            string articletext = DBHandler.GetArticleByCountryName(country);
+            articletext = articletext.Replace("\n", "<br>");
+            article.Text = articletext;
+            Console.WriteLine(articletext);
+            DBHandler.Close();
         }
     }
 }
