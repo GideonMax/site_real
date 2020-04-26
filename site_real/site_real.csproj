@@ -78,8 +78,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminControls.aspx" />
-    <Content Include="js\countryData.js" />
-    <Content Include="js\test.js" />
+    <Content Include="js\countryData.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\countryDataAdmin.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\DBTextWC.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\geocoding.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\test.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\Database.accdb" />
     <Content Include="css\interactive.css" />
     <Content Include="css\join.css" />
@@ -90,6 +103,12 @@
     <Content Include="Global.asax" />
     <Content Include="interactive.aspx" />
     <Content Include="Join.aspx" />
+    <Content Include="js\TextRequestApi.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\TextRequestApiAdmin.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Login.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -102,6 +121,8 @@
       <DependentUpon>AdminControls.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Code\DBHandler.cs" />
+    <Compile Include="App_Code\IndexedProperty.cs" />
+    <Compile Include="App_Code\OutPutFile.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -142,7 +163,8 @@
       <DependentUpon>main.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="requests\countryInfo.cs" />
+    <Compile Include="requests\CountryInfoHandler.cs" />
+    <Compile Include="requests\TextRequestHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="main.Master" />

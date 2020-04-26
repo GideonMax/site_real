@@ -6,6 +6,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
     <h1>Welcome to World Viewer Beta</h1>
+    <db-div TextName="main"></db-div>
     <br />
-    <asp:PlaceHolder runat="server" id="texttest"/>
 </asp:Content>

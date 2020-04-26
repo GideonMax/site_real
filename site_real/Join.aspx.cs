@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using site_real.App_Code;
 
 namespace site_real
 {
@@ -22,22 +21,21 @@ namespace site_real
             }
             else
             {
-                using(DBHandler db = new DBHandler())
-                {
-                    bool is_admin = admin_code.Text == db.GetData("admin_key");
-                    int id = db.Adduser(u_name.Text, u_password.Text, is_admin);
+                DBHandler.Open();
+                    bool is_admin = admin_code.Text == DBHandler.Data["admin_key"];
+                    int id = DBHandler.Adduser(u_name.Text, u_password.Text, is_admin);
                     if (id == 0)
                     {
                         message.Text = "user name or password already exist";
                     }
                     else
                     {
-                        message.Text = "signed up successfully";
                         Session["user_name"] = u_name.Text;
                         Session["user_id"] = id;
                         Session["is_admin"] = is_admin;
                     }
-                }
+                DBHandler.Close();
+                Response.Redirect("/Default.aspx");
             }
         }
         public void Unnamed_CheckedChanged(object sender, EventArgs e)

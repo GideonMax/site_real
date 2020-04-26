@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.IO;
+using System.Text;
 
 namespace site_real
 {
@@ -10,7 +12,6 @@ namespace site_real
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -19,14 +20,21 @@ namespace site_real
                 routeTemplate: "country/{id}",
                 defaults: new { id = RouteParameter.Optional },
                 constraints:null,
-                handler: new CountryInfo()
+                handler: new CountryInfoHandler()
             );
             config.Routes.MapHttpRoute(
                 name: "countryApi2",
                 routeTemplate: "country/{id}/{yes}",
                 defaults: new { id = RouteParameter.Optional },
                 constraints: null,
-                handler: new CountryInfo()
+                handler: new CountryInfoHandler()
+            );
+            config.Routes.MapHttpRoute(
+                name: "TextApi",
+                routeTemplate: "text/{id}",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
+                handler: new TextRequestHandler()
             );
         }
     }
