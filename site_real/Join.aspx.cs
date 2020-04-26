@@ -30,12 +30,12 @@ namespace site_real
                     }
                     else
                     {
-                        message.Text = "signed up successfully";
                         Session["user_name"] = u_name.Text;
                         Session["user_id"] = id;
                         Session["is_admin"] = is_admin;
                     }
                 DBHandler.Close();
+                Response.Redirect("/Default.aspx");
             }
         }
         public void Unnamed_CheckedChanged(object sender, EventArgs e)
