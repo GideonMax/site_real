@@ -1,4 +1,4 @@
-﻿getAllCountryCodes().then(
+﻿/*getAllCountryCodes().then(
     (data) => {
         console.log(data);
         for(var i in data){
@@ -9,8 +9,8 @@
             })
         }
     }
-)
-
+)*/
+GetGeocode(45.926696,3.407534).then(console.log);
 /*getCountryData("ar").then(dat => {
     console.log("yes")
     console.log(dat);
