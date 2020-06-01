@@ -1,9 +1,9 @@
 ﻿
 /**
  * 
- * 
+ * @deprecated
+ * @summary gets all country names in the database
  * @returns {Promise<string[]>}
- * 
  * */
 function getAllCountryNames() {
     return fetch("/country/getall").then(res => res.json());
@@ -25,7 +25,11 @@ function getAllCountryCodes() {
 function getCountryData(Code) {
     return fetch(`/country/get/${Code}`).then(res => res.json());
 }
-
+/**
+ * sets the country's data without changing any admin field
+ * @param {string} Code the country's code
+ * @param {Country} Data the Country object to set the country to
+ */
 function setCountryData(Code, Data) {
     return fetch(`/country/set/${Code}`, {
         method: "POST",

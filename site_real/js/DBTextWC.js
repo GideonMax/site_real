@@ -8,8 +8,10 @@
     }
     connectedCallback(){
         this.appendChild(this.div);
-        var name = this.getAttribute('TextName');
-        GetText(name).then(val=>{this.div.innerHTML=val});
+        GetText(this.getAttribute('TextName')).then(val => { this.div.innerHTML = val });
+    }
+    attributeChangedCallback(name, oldvalue, newvalue) {
+        GetText(newValue).then(val=>{this.div.innerHTML=val});
     }
 }
 
