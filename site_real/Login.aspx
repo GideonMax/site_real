@@ -3,7 +3,7 @@
      <link type="text/css" href="css/login.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
-    <h1>Login</h1>
+    <h1>כניסה לאתר</h1>
     <asp:Label Text="שם משתמש:" runat="server" AssociatedControlID="u_name" />
     <asp:TextBox runat="server" ID="u_name" />
 	<br />

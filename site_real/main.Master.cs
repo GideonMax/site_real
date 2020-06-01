@@ -18,11 +18,11 @@ namespace site_real
                 LogoutLink.Visible = true;
                 if((bool)Session["is_admin"])
                 {
-                    GreetingLabel.Text = "Welcome admin " + Session["user_name"];
+                    GreetingLabel.Text = "ברוך הבא אדמין " + Session["user_name"];
                 }
                 else
                 {
-                    GreetingLabel.Text= "Welcome "+ Session["user_name"];
+                    GreetingLabel.Text= "ברוך הבא "+ Session["user_name"];
                 }
             }
         }

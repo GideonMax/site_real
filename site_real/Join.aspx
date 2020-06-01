@@ -3,7 +3,7 @@
     <link type="text/css" href="css/join.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
-    <h1>Join</h1>
+    <h1>הצטרף לאתר שלנו</h1>
     <br />
     <asp:Label Text="שם משתמש:" AssociatedControlID="u_name" runat="server" />
     <asp:TextBox runat="server" id="u_name"  />

@@ -4,7 +4,7 @@
      <link type="text/css" href="css/default.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
-    <h1>Welcome to World Viewer Beta</h1>
+    <h1>ברוך הבא לWorld Viewer</h1>
     <br />
     <asp:PlaceHolder runat="server" id="texttest"/>
 </asp:Content>
