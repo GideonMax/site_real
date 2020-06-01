@@ -4,10 +4,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
     <h1>Login</h1>
-    <asp:Label Text="שם משתמש" runat="server" AssociatedControlID="u_name" />
+    <asp:Label Text="שם משתמש:" runat="server" AssociatedControlID="u_name" />
     <asp:TextBox runat="server" ID="u_name" />
 	<br />
-    <asp:Label runat="server" Text="סיסמא" AssociatedControlID="u_password" />
+    <asp:Label runat="server" Text="סיסמא:" AssociatedControlID="u_password" />
 	<asp:TextBox runat="server" ID="u_password" TextMode="Password" />
 	<br />
     <asp:Button runat="server" ID="login" Text="כניסה" OnClick="Login" />
