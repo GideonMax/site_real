@@ -1,4 +1,9 @@
-﻿
+﻿/**
+ * @typedef {Object} Country
+ * @property {String} CountryName 
+ * @property {String} OfficialArticle 
+ * @property {String} UserArticle 
+ */
 /**
  * 
  * @deprecated
@@ -20,7 +25,7 @@ function getAllCountryCodes() {
 /**
  * 
  * @param {string} Code
- * @returns {Promise<object>} 
+ * @returns {Promise<Country>} 
  */
 function getCountryData(Code) {
     return fetch(`/country/get/${Code}`).then(res => res.json());

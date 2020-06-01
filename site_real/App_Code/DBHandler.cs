@@ -330,6 +330,15 @@ namespace site_real
                 AddCountryInfoByCode(code, info);
                 return;
             }
+            if (info.IsAdminRequest&&info.CountryName!=null)
+            {
+                string command = "UPDATE [countries] SET [country_name]=@Name WHERE [code]=@Code;";
+                OleDbCommand cmd = new OleDbCommand(command, Con);
+                cmd.Parameters.AddWithValue("@Code", code);
+                cmd.Parameters.AddWithValue("@Name", info.CountryName);
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+            }
             if (info.OfficialArticle != null)
             {
                 string command = "UPDATE [countries] SET [article]=@Article WHERE [code]=@Code;";
@@ -570,5 +579,6 @@ namespace site_real
         public string CountryName = null;
         public string OfficialArticle = null;
         public string UserArticle = null;
+        public bool IsAdminRequest = false;
     } 
 }
