@@ -1,8 +1,10 @@
 ﻿/**
  * @typedef {Object} Country
+ * @property {String} code
  * @property {String} CountryName 
  * @property {String} OfficialArticle 
  * @property {String} UserArticle 
+ * @property {Boolean} exists
  */
 /**
  * 
@@ -28,7 +30,12 @@ function getAllCountryCodes() {
  * @returns {Promise<Country>} 
  */
 function getCountryData(Code) {
-    return fetch(`/country/get/${Code}`).then(res => res.json());
+    return fetch(`/country/get/${Code}`).then(res => res.json()).then((country=>{
+        if(country==null)return {exists:false,code:Code};
+        country.exists=true;
+        country.code=Code;
+        return country;
+    }));
 }
 /**
  * sets the country's data without changing any admin field
