@@ -90,6 +90,10 @@
     <Content Include="js\geocoding.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\HereTest.js" />
+    <Content Include="js\interactive.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="js\maps\charts\charts.js" />
     <Content Include="js\maps\charts\core.js" />
     <Content Include="js\maps\charts\deps\canvg.js" />
