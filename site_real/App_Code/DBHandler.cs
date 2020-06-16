@@ -288,7 +288,7 @@ namespace site_real
         {
             if (!DoesCountryExist(code)) return null;
             CountryInfo info = new CountryInfo();
-            string command = "SELECT [article] FROM [countries] WHERE [code]=@Name";
+            string command = "SELECT [article],[user_article],[country_name] FROM [countries] WHERE [code]=@Name";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@Name", code);
             using (DbDataReader reader = cmd.ExecuteReader())
@@ -296,28 +296,8 @@ namespace site_real
                 if (reader.Read())
                 {
                     info.OfficialArticle= reader["article"].ToString().Replace("\n","<br>");
-                }
-            }
-            cmd.Dispose();
-            command = "SELECT [user_article] FROM [countries] WHERE [code]=@Name";
-            cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("@Name", code);
-            using (DbDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
                     info.UserArticle = reader["user_article"].ToString().Replace("\n", "<br>");
-                }
-            }
-            cmd.Dispose();
-            command = "SELECT [country_name] FROM [countries] WHERE [code]=@Name";
-            cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("@Name", code);
-            using (DbDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    info.CountryName= reader["country_name"].ToString();
+                    info.CountryName = reader["country_name"].ToString();
                 }
             }
             cmd.Dispose();
