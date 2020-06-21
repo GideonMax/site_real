@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 Please note, that this project, while following numbering syntax, it DOES NOT
 adhere to [Semantic Versioning](http://semver.org/spec/v2.0.0.html) rules.
 
+## [4.9.27] - 2020-06-18
+
+### Added
+- `ExportMenu` item definition can now have `title` property. If set, it will be added to item's `title` property, which should show a system tooltip on hover.
+
+### Changed
+- Hex color parser now supports RGBA format which includes alpha value, e.g. `"#FF000080"` will produce a 50% transparent red.
+
+### Fixed
+- Fixed performance issue with a logarithmic `ValueAxis` with `strictMinMax` set to `true`.
+- Calculated value of `sum` in the selection of an `XYChart` could include one extra data item, not visible in the selection.
+- Pie slices with 0 values were sorted incorrectly in FF.
+
+
 ## [4.9.26] - 2020-06-07
 
 ### Fixed
@@ -497,7 +511,7 @@ for cpu and sometimes you might only need one single tooltip for all clones. Set
 - When `Legend`'s position is `"left"` or `"right"` it no longer fixes its width at 200px width, but sets `maxWidth` to 220. This means that legend will take only as much width as it is necessary to accommodate its contents, which usually results in more space for chart itself. Set `maxWidth` to `undefined` if you want all the labels to be displayed and not to be truncated if they don't fit.
 - When `Legend`'s position is `"left"` or `"right"` it automatically sets `maxColumns` to `1` (one) so that legend items would be arranged in one column only. You can change this setting if you need more columns (you should do this after the position is set).
 - Setting `focusable = true` on an element will now automatically set `tabindex = 0`. This is required for some browsers (FF) for elements to be focusable. This means that a bunch of elements that are focusable by default (legend items, grips, buttons, etc.) will now have `tabindex` set automatically as well.
-- Default for `Label.ellipsis` (used when truncating texts) was changed from "..." (three dots) to "…" (
+- Default for `Label.ellipsis` (used when truncating texts) was changed from "..." (three dots) to "….js.js" (
 Unicode Character 'HORIZONTAL ELLIPSIS'; U+2026).
 - `Label` wrapping will now try not to split strings on dots where there are no whitespace afterwards, e.g. "55.5%".
 

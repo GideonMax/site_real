@@ -10,7 +10,7 @@
         }
     }
 )*/
-GetGeocode(45.926696,3.407534).then(console.log);
+Geocode(45.926696,3.407534).then(console.log);
 /*getCountryData("ar").then(dat => {
     console.log("yes")
     console.log(dat);

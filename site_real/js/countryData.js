@@ -51,3 +51,4 @@ function setCountryData(Code, Data) {
         body: JSON.stringify(Data)
     });
 }
+export {getAllCountryCodes,getAllCountryNames,getCountryData,setCountryData};

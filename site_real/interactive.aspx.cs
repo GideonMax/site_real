@@ -11,6 +11,7 @@ namespace site_real
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            /*
             DBHandler.Open();
                 string[] names = DBHandler.GetAllCountryNames();
                 if (names != null)
@@ -26,7 +27,7 @@ namespace site_real
                         buttons.Controls.Add(button);
                     }
                 }
-            DBHandler.Close();
+            DBHandler.Close();*/
         }
         void Load_Article(string country)
         {
