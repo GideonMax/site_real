@@ -10,7 +10,7 @@ namespace site_real
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if ((bool)Session["is_admin"])
+            if (Session["is_admin"] == null||!(bool)Session["is_admin"])
             {
                 Response.Redirect("Default.aspx");
             }
