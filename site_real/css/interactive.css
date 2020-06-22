@@ -11,7 +11,7 @@
 
 form {
     align-self: stretch;
-    text-align: center;
+    /*text-align: center;*/
     background-attachment: fixed;
     background-color: lightskyblue;
 }

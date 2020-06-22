@@ -3,7 +3,7 @@
  * @param {string} Code 
  * @param {Country} Data 
  */
-function setCountryDataAdmin(Code, Data) {
+export default function setCountryDataAdmin(Code, Data) {
     return fetch(`/country/setadmin/${Code}`, {
         method: "POST",
         headers: {

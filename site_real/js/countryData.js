@@ -1,4 +1,11 @@
-﻿
+﻿/**
+ * @typedef {Object} Country
+ * @property {String} code
+ * @property {String} CountryName 
+ * @property {String} OfficialArticle 
+ * @property {String} UserArticle 
+ * @property {Boolean} exists
+ */
 /**
  * 
  * @deprecated
@@ -20,10 +27,15 @@ function getAllCountryCodes() {
 /**
  * 
  * @param {string} Code
- * @returns {Promise<object>} 
+ * @returns {Promise<Country>} 
  */
 function getCountryData(Code) {
-    return fetch(`/country/get/${Code}`).then(res => res.json());
+    return fetch(`/country/get/${Code}`).then(res => res.json()).then((country=>{
+        if(country==null)return {exists:false,code:Code};
+        country.exists=true;
+        country.code=Code;
+        return country;
+    }));
 }
 /**
  * sets the country's data without changing any admin field
@@ -39,3 +51,4 @@ function setCountryData(Code, Data) {
         body: JSON.stringify(Data)
     });
 }
+export {getAllCountryCodes,getAllCountryNames,getCountryData,setCountryData};

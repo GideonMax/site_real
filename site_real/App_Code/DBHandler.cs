@@ -288,7 +288,7 @@ namespace site_real
         {
             if (!DoesCountryExist(code)) return null;
             CountryInfo info = new CountryInfo();
-            string command = "SELECT [article] FROM [countries] WHERE [code]=@Name";
+            string command = "SELECT [article],[user_article],[country_name] FROM [countries] WHERE [code]=@Name";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@Name", code);
             using (DbDataReader reader = cmd.ExecuteReader())
@@ -296,28 +296,8 @@ namespace site_real
                 if (reader.Read())
                 {
                     info.OfficialArticle= reader["article"].ToString().Replace("\n","<br>");
-                }
-            }
-            cmd.Dispose();
-            command = "SELECT [user_article] FROM [countries] WHERE [code]=@Name";
-            cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("@Name", code);
-            using (DbDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
                     info.UserArticle = reader["user_article"].ToString().Replace("\n", "<br>");
-                }
-            }
-            cmd.Dispose();
-            command = "SELECT [country_name] FROM [countries] WHERE [code]=@Name";
-            cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("@Name", code);
-            using (DbDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    info.CountryName= reader["country_name"].ToString();
+                    info.CountryName = reader["country_name"].ToString();
                 }
             }
             cmd.Dispose();
@@ -329,6 +309,15 @@ namespace site_real
             {
                 AddCountryInfoByCode(code, info);
                 return;
+            }
+            if (info.IsAdminRequest&&info.CountryName!=null)
+            {
+                string command = "UPDATE [countries] SET [country_name]=@Name WHERE [code]=@Code;";
+                OleDbCommand cmd = new OleDbCommand(command, Con);
+                cmd.Parameters.AddWithValue("@Code", code);
+                cmd.Parameters.AddWithValue("@Name", info.CountryName);
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
             }
             if (info.OfficialArticle != null)
             {
@@ -596,5 +585,6 @@ namespace site_real
         public string CountryName = null;
         public string OfficialArticle = null;
         public string UserArticle = null;
+        public bool IsAdminRequest = false;
     } 
 }

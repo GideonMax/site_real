@@ -72,7 +72,11 @@ namespace site_real
             {
                 string body = await message.Content.ReadAsStringAsync();
                 CountryInfo info = JsonConvert.DeserializeObject<CountryInfo>(body);
-                if (parsedUri[2] != "setadmin") info.OfficialArticle = null;
+                if (parsedUri[2] != "setadmin") {
+                    info.OfficialArticle = null;
+                    info.IsAdminRequest = false;
+                }
+                else info.IsAdminRequest = true;
                 DBHandler.Open();
                     DBHandler.Countries[parsedUri[3]] = info;
                 DBHandler.Close();
