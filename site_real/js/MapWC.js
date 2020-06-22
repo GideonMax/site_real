@@ -37,7 +37,6 @@ class MapElement extends HTMLElement {
         this.map = MapsCore.create(this.div, Maps.MapChart);
         this.map.geodata = GeoData;
         this.map.projection = new Maps.projections.Miller();
-        this.map.panBehavior="rotateLong";
         this.series = this.map.series.push(new Maps.MapPolygonSeries());
         this.series.useGeodata = true;
         this.polygonTemplate = this.series.mapPolygons.template;

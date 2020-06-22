@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using site_real.App_Code;
 namespace site_real
 {
     public partial class SubmitBugReport : System.Web.UI.Page
@@ -18,10 +17,9 @@ namespace site_real
         {
             string title = ReportTitle.Text;
             string body = Body.Text;
-            using (DBHandler DB = new DBHandler())
-            {
-                DB.OpenBugReport(title, body, (int)Session["user_id"]);
-            }
+            DBHandler.Open();
+                DBHandler.OpenBugReport(title, body, (int)Session["user_id"]);
+            DBHandler.Close();
         }
     }
 }

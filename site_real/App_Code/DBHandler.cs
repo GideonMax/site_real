@@ -547,7 +547,7 @@ namespace site_real
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
-        public DbDataReader GetAllBugReports()
+        public static DbDataReader GetAllBugReports()
         // פעולה המחזירה (עצם שייקרא) את כל הנושאים בפורום
         {
             string sql = "SELECT S.[ID], [Title], [user_name]" +
@@ -558,7 +558,7 @@ namespace site_real
             OleDbCommand cmd = new OleDbCommand(sql, Con);
             return cmd.ExecuteReader();
         }
-        public int OpenBugReport(string Title, string Body, int User)
+        public static int OpenBugReport(string Title, string Body, int User)
         // פעולה המקבלת כותרת ותוכן של נושא חדש ומספר משתמש
         // מוסיפה את הנושא לפורום, ומחזירה את מספרו
         {
