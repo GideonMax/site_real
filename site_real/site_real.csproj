@@ -93,6 +93,8 @@
     <Content Include="js\test.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="BR.aspx" />
+    <Content Include="js\test.js" />
     <Content Include="App_Data\Database.accdb" />
     <Content Include="css\interactive.css" />
     <Content Include="css\join.css" />
@@ -110,6 +112,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Login.aspx" />
+    <Content Include="Subject.aspx" />
+    <Content Include="SubmitBugReport.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +128,13 @@
     <Compile Include="App_Code\IndexedProperty.cs" />
     <Compile Include="App_Code\OutPutFile.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BR.aspx.cs">
+      <DependentUpon>BR.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BR.aspx.designer.cs">
+      <DependentUpon>BR.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -165,6 +176,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="requests\CountryInfoHandler.cs" />
     <Compile Include="requests\TextRequestHandler.cs" />
+    <Compile Include="Subject.aspx.cs">
+      <DependentUpon>Subject.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Subject.aspx.designer.cs">
+      <DependentUpon>Subject.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SubmitBugReport.aspx.cs">
+      <DependentUpon>SubmitBugReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SubmitBugReport.aspx.designer.cs">
+      <DependentUpon>SubmitBugReport.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="main.Master" />

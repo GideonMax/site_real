@@ -6,7 +6,6 @@
      <link type="text/css" href="css/default.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
-    <h1>Welcome to World Viewer Beta</h1>
-    <db-div TextName="main"></db-div>
+    <h1>ברוך הבא לWorld Viewer</h1>
     <br />
 </asp:Content>

@@ -6,8 +6,8 @@
 }
 
 nav li {
-    height:2.4em;
-    border: thick solid black;
+    height:1.3em;
+    border: 1.2px solid black;
     flex: 1;
 }
 
@@ -27,7 +27,7 @@ nav li a:hover {
 body {
     margin-left: 10%;
     margin-right: 10%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', fantasy;
     background-color: silver;
     box-shadow: 0 1em 1em -.6em black;
     background-image: url(http://eskipaper.com/images/world-map-wallpaper-8.jpg)
