@@ -13,7 +13,11 @@ import Post from './Post.js';
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
  * @returns {Promise<Comment[]>} 
+=======
+ * @returns {Comment[]} 
+>>>>>>> Stashed changes
 =======
  * @returns {Comment[]} 
 >>>>>>> Stashed changes
@@ -46,8 +50,12 @@ function BuildAndAddComment(Country,UserID,Body){
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 }
 export{GetCountryComments,AddNewComment,BuildAndAddComment};
+=======
+}
+>>>>>>> Stashed changes
 =======
 }
 >>>>>>> Stashed changes
