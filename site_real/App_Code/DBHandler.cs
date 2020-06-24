@@ -4,6 +4,7 @@ using System.Web;
 using System.Configuration;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.Security.Cryptography;
 
 namespace site_real
 {
@@ -317,7 +318,7 @@ namespace site_real
         {
             if (!DoesCountryExist(code)) return null;
             CountryInfo info = new CountryInfo();
-            string command = "SELECT [article],[user_article],[country_name] FROM [countries] WHERE [code]=@Name";
+            string command = "SELECT [ID],[article],[user_article],[country_name] FROM [countries] WHERE [code]=@Name";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@Name", code);
             using (DbDataReader reader = cmd.ExecuteReader())
@@ -327,6 +328,7 @@ namespace site_real
                     info.OfficialArticle= reader["article"].ToString().Replace("\n","<br>");
                     info.UserArticle = reader["user_article"].ToString().Replace("\n", "<br>");
                     info.CountryName = reader["country_name"].ToString();
+                    info.ID = (int)reader["ID"];
                 }
             }
             cmd.Dispose();
@@ -501,6 +503,50 @@ namespace site_real
             return ret;
         }
         #endregion
+        #region CountryForum
+        public static void AddNewComment(Comment c)
+        {
+            AddNewComment(c.Country, c.UserId, c.Body);
+        }
+        public static void AddNewComment(int Country, int User, string Body)
+        {
+            string command = "INSERT INTO [CountryForums] ([CountryID],[UserID],[Body])" +
+                " VALUES (@Country,@User,@Body)";
+            
+            using (OleDbCommand cmd = new OleDbCommand(command, Con))
+            {
+                cmd.Parameters.AddWithValue("@Country", Country);
+                cmd.Parameters.AddWithValue("@User", User);
+                cmd.Parameters.AddWithValue("@Body", Body);
+                cmd.ExecuteNonQuery();
+            }
+        }
+        public static Comment[] GetCountryComments(int Country)
+        {
+            string command = "SELECT [CommentID],[UserID],[user_name],[Body]" +
+                " FROM [CountryForums] AS C" +
+                " INNER JOIN [Users] AS U ON C.[UserID]=U.[ID]" +
+                " WHERE [is_active] AND [CountryID]=@Country AND [Exists]" +
+                " ORDER BY [CreationDate] ASC";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            cmd.Parameters.AddWithValue("@Country", Country);
+            List<Comment> ret = new List<Comment>();
+            using (OleDbDataReader Reader = cmd.ExecuteReader())
+            {
+                while (Reader.Read())
+                {
+                    Comment c = new Comment();
+                    c.ID = (int)Reader["CommentID"];
+                    c.Country = Country;
+                    c.UserId = (int)Reader["UserID"];
+                    c.UserName = (string)Reader["user_name"];
+                    c.Body = (string)Reader["Body"];
+                }
+            }
+            cmd.Dispose();
+            return ret.ToArray();
+        }
+        #endregion
         #region text
         /// <summary>
         /// Lets you get a text using indexing.<br></br>
@@ -576,8 +622,13 @@ namespace site_real
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
+        #endregion
+        #region BugReports
+        /// <summary>
+        /// gets the ID Title and user name of every open bug report
+        /// </summary>
+        /// <returns></returns>
         public static DbDataReader GetAllBugReports()
-        // פעולה המחזירה (עצם שייקרא) את כל הנושאים בפורום
         {
             string sql = "SELECT S.[ID], [Title], [user_name]" +
                 " FROM [BugReports] AS S" +
@@ -587,9 +638,14 @@ namespace site_real
             OleDbCommand cmd = new OleDbCommand(sql, Con);
             return cmd.ExecuteReader();
         }
+        /// <summary>
+        /// Makes a new bug report
+        /// </summary>
+        /// <param name="Title">the report's title</param>
+        /// <param name="Body">the report's body</param>
+        /// <param name="User">The ID of the user</param>
+        /// <returns></returns>
         public static int OpenBugReport(string Title, string Body, int User)
-        // פעולה המקבלת כותרת ותוכן של נושא חדש ומספר משתמש
-        // מוסיפה את הנושא לפורום, ומחזירה את מספרו
         {
             string sql = "INSERT INTO [BugReports] ([Title], [ReportBody], [User])" +
                 " VALUES (@Title, @Body, @UserID)";
@@ -598,7 +654,7 @@ namespace site_real
             cmd.Parameters.AddWithValue("@Body", Body);
             cmd.Parameters.AddWithValue("@UserID", User);
             cmd.ExecuteNonQuery();
-            cmd = new OleDbCommand("SELECT @@IDENTITY", Con); 
+            cmd = new OleDbCommand("SELECT @@IDENTITY", Con);
             int id = (int)cmd.ExecuteScalar();
             return id;
         }
@@ -611,9 +667,18 @@ namespace site_real
     /// </summary>
     public class CountryInfo
     {
+        public int ID;
         public string CountryName = null;
         public string OfficialArticle = null;
         public string UserArticle = null;
         public bool IsAdminRequest = false;
     } 
+    public class Comment
+    {
+        public int ID;
+        public int Country;
+        public int UserId;
+        public string UserName;
+        public string Body;
+    }
 }

@@ -10,7 +10,11 @@ import Post from './Post.js';
 /**
  * 
  * @param {Number} Country
+<<<<<<< Updated upstream
  * @returns {Promise<Comment[]>} 
+=======
+ * @returns {Comment[]} 
+>>>>>>> Stashed changes
  */
 function GetCountryComments(Country){
     return fetch(`forum/${Country}`).then(res=>res.json());
@@ -31,5 +35,9 @@ function AddNewComment(comment){
 function BuildAndAddComment(Country,UserID,Body){
     let comment={Country:Country,UserID:UserID,Body:Body};
     AddNewComment(comment);
+<<<<<<< Updated upstream
 }
 export{GetCountryComments,AddNewComment,BuildAndAddComment};
+=======
+}
+>>>>>>> Stashed changes
