@@ -7,3 +7,4 @@ function GetText(TextName) {
     return fetch(`/text/${TextName}`)
         .then(res => res.text());
 }
+export default GetText;

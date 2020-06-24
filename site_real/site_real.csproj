@@ -8792,11 +8792,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="js\Post.js" />
-    <Content Include="js\test.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="BR.aspx" />
-    <Content Include="js\test.js" />
     <Content Include="App_Data\Database.accdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
