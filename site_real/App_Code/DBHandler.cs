@@ -632,7 +632,7 @@ namespace site_real
         {
             string sql = "SELECT S.[ID], [Title], [user_name]" +
                 " FROM [BugReports] AS S" +
-                " JOIN [Users] AS U ON S.[User]=U.[ID]" +
+                " INNER JOIN [Users] AS U ON S.[User]=U.[ID]" +
                 " WHERE not [Closed]" +
                 " ORDER BY [creation_time] DESC";
             OleDbCommand cmd = new OleDbCommand(sql, Con);
