@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminControls.aspx" />
+    <Content Include="css\Map.css" />
     <Content Include="js\countryData.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

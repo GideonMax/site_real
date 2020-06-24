@@ -7,7 +7,7 @@
     <!--<div class="buttons">
         <asp:PlaceHolder runat="server" ID="buttons" />
     </div>-->
-    <g-map>
+    <g-map id="map">
 
     </g-map>
     <!--
