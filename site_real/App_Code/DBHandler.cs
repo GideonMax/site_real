@@ -9,6 +9,9 @@ namespace site_real
 {
     public static class DBHandler
     {
+        const int SaltLength = 27;
+        const int HashLength = 41;
+        const int HashRepetitions = 1021;
         static OleDbConnection Con;
         static int AmountOfConnections = 0;
         public static void Open()
@@ -65,6 +68,15 @@ namespace site_real
             command.Dispose();
             return ret;
         }
+       static byte[] Hash(string Password, byte[] salt)
+       {
+            byte[] ret = null;
+            using (Rfc2898DeriveBytes Hasher = new Rfc2898DeriveBytes(Password, salt, HashRepetitions))
+            {
+                ret = Hasher.GetBytes(HashLength);
+            }
+            return ret;
+       }
         /// <summary>
         /// This method returns a user's ID given a username and a password
         /// </summary>
@@ -73,20 +85,31 @@ namespace site_real
         /// <returns>ID</returns>
         public static int GetUser(string name, string password)
         {
-            string cmd = "SELECT [ID] FROM [Users] WHERE [is_active] AND [user_name]=@Name AND [user_password]=@Password";
+            string cmd = "SELECT [ID],[hash],[salt] FROM [Users] WHERE [is_active] AND [user_name]=@Name";
+
             OleDbCommand command = new OleDbCommand(cmd, Con);
             command.Parameters.AddWithValue("@Name", name);
-            command.Parameters.AddWithValue("@Password", password);
             int ret = 0;
             using (OleDbDataReader reader = command.ExecuteReader())
             {
                 if (reader.Read())
                 {
+                    byte[] hash = Hash(password, (byte[])reader["salt"]);
+                    if(CompareByteArrays(hash,(byte[])reader["hash"]))
                     ret = (int)reader["ID"];
                 }
             }
             command.Dispose();
             return ret;
+        }
+        static bool CompareByteArrays(byte[] a, byte[] b)
+        {
+            if (a.Length != b.Length) return false;
+            for(int i = 0; i < a.Length; i++)
+            {
+                if (a[i] != b[i]) return false;
+            }
+            return true;
         }
         /// <summary>
         /// Given the ID of a user, this function checks if they are an admin.
@@ -116,18 +139,23 @@ namespace site_real
         /// <param name="password">The user's password</param>
         /// <param name="is_admin">Is the user an admin</param>
         /// <returns>The user's ID</returns>
-        public static int Adduser(string name, string password, bool is_admin = false)
+        public static int Adduser(string name, string password, bool IsAdmin = false)
         {
-            if (GetUser(name) != 0 || CheckPassword(password))
+            if (GetUser(name) != 0)
             {
                 return 0;
             }
-            string command = "INSERT INTO [Users] ([user_name],[user_password],[is_admin])"
-                + " VALUES (@u_name,@u_password,@is_admin);";
+            byte[] Salt = new byte[SaltLength];
+            using (RNGCryptoServiceProvider CryptographicProvider = new RNGCryptoServiceProvider())
+                CryptographicProvider.GetNonZeroBytes(Salt);
+            byte[] hash = Hash(password, Salt);
+            string command = "INSERT INTO [Users] ([user_name],[hash],[salt],[is_admin])"
+                + " VALUES (@UserName,@Hash,@Salt,@IsAdmin);";
             OleDbCommand cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("@u_name", name);
-            cmd.Parameters.AddWithValue("@u_password", password);
-            cmd.Parameters.AddWithValue("@is_admin", is_admin);
+            cmd.Parameters.AddWithValue("@UserName", name);
+            cmd.Parameters.AddWithValue("@Hash", hash);
+            cmd.Parameters.AddWithValue("@Salt", Salt);
+            cmd.Parameters.AddWithValue("@IsAdmin", IsAdmin);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cmd = new OleDbCommand("SELECT @@IDENTITY", Con);
@@ -135,6 +163,7 @@ namespace site_real
             cmd.Dispose();
             return ret;
         }
+        /*
         /// <summary>
         /// Checks if a password already exists, returns true if it does and false if it does not.
         /// </summary>
@@ -155,7 +184,7 @@ namespace site_real
             }
             cmd.Dispose();
             return ret;
-        }
+        }*/
         #endregion
         #region data
         /// <summary>
