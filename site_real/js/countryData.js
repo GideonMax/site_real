@@ -1,5 +1,7 @@
-﻿/**
+﻿
+/**
  * @typedef {Object} Country
+ * @property {Number} ID
  * @property {String} code
  * @property {String} CountryName 
  * @property {String} OfficialArticle 
@@ -42,13 +44,8 @@ function getCountryData(Code) {
  * @param {string} Code the country's code
  * @param {Country} Data the Country object to set the country to
  */
+import Post from './Post.js';
 function setCountryData(Code, Data) {
-    return fetch(`/country/set/${Code}`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(Data)
-    });
+    return Post(`/country/set/${Code}`,Data);
 }
 export {getAllCountryCodes,getAllCountryNames,getCountryData,setCountryData};

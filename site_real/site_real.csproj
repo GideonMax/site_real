@@ -8790,6 +8790,7 @@
     <Content Include="js\MapWC.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\Post.js" />
     <Content Include="js\test.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
