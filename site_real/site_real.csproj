@@ -90,6 +90,7 @@
     <Content Include="js\DBTextWC.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\ForumApi.js" />
     <Content Include="js\geocoding.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
