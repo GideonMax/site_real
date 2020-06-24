@@ -10,7 +10,7 @@ namespace site_real
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["user_id"] == null) Response.Redirect(".");
         }
 
         protected void SubmitReport(object sender, EventArgs e)

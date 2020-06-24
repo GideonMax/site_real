@@ -30,6 +30,13 @@ namespace site_real
                 handler: new CountryInfoHandler()
             );
             config.Routes.MapHttpRoute(
+                name: "ForumApi",
+                routeTemplate: "forum/{id}",
+                defaults: new { id = RouteParameter.Optional },
+                constraints: null,
+                handler: new CountryForumHandler()
+            );
+            config.Routes.MapHttpRoute(
                 name: "TextApi",
                 routeTemplate: "text/{id}",
                 defaults: new { id = RouteParameter.Optional },

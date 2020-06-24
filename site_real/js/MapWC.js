@@ -1,16 +1,23 @@
 /**
- * @typedef {Object} LatLng
- * @property {Number} lat
- * @property {Number} lng
-*/
-//import "./Maps/Charts/node_modules/core-js/index.js";
-//import { default as Maps } from "https://js.api.here.com/v3/3.1/mapsjs.bundle.js";
+ * @typedef {Object} Country
+ * @property {Number} ID
+ * @property {String} code
+ * @property {String} CountryName 
+ * @property {String} OfficialArticle 
+ * @property {String} UserArticle 
+ * @property {Boolean} exists
+ */
+//#region MapsImports
 import * as MapsCore from './Maps/Charts/core.js';
 import * as Maps from './Maps/Charts/maps.js';
 import theme from './Maps/Charts/themes/animated.js';
 import { default as GeoData } from './Maps/geodata/worldHigh.js';
+//#endregion
+//#region MyOwnImports
 import GeoCode from './geocoding.js';
-import {getCountryData}from './countryData.js';
+import {getCountryData} from './countryData.js';
+import * as CommentApi from './ForumApi.js';
+//#endregion
 //const Maps=H;
 //let apiKey = "PMFoDa_dg5LnVM4X9dVHmZuzLg_haag5crYUoYoregg";
 console.log(Maps);
@@ -47,39 +54,56 @@ class MapElement extends HTMLElement {
         });
         this.series.exclude=["AQ"];
     }
-    connectedCallback() {
-        /*
-        this.map = new Maps.Map(
-            this.div,
-            this.defaultLayers.vector.normal.map,
-            {
-                zoom: 8,
-                center: { lat: 52.5, lng: 13.4 }
-            });
-            this.mapEvents=new Maps.mapevents.MapEvents(this.map);
-        this.map.addEventListener('pointerdown',(e)=>{
-            this.isDragging=false;
-        });
-        this.map.addEventListener('drag',(e)=>{
-            this.isDragging=true;
-        });
-        this.map.addEventListener('click',(e)=>{
-            console.log(e);
-            if(!this.isDragging){
-                console.log(e);
-            }
-        });
-        console.log(this.map.addEventListener);
-        this.behavior = new Maps.mapevents.Behavior(this.mapEvents);
-        */
-        //console.log(this.ui.getMap());
-    }
     /**
      * 
      * @param {Country} country
      */
     showCountry(country) {
-        console.log(country);
+        let div = document.createElement("div");
+        div.className="popup";
+        let exitButton = document.createElement("button");
+        exitButton.onclick=()=>{
+            div.remove();
+        };
+        div.appendChild(exitButton);
+        let editButton = document.createElement("button");
+        editButton.onclick=this.PopUpEditWindow(country);
+        div.appendChild(editButton);
+        if(!country.exists){
+            let text=document.createElement("div");
+            text.innerHTML="<h1>על המדינה הזאת אין לנו מידע</h1><br>אולי תוסיף?";
+        }
+        else{
+            div.append(`<h1>${country.CountryName}</h1>`);
+            if(country.OfficialArticle&&country.OfficialArticle!=null){
+                div.append("<h2>ערך רשמי</h2>");
+                div.append(country.OfficialArticle);
+            }
+            if(country.UserArticle&&country.UserArticle!=null){
+                div.append("<h2>ערך של משתמשי האתר</h2>");
+                div.append(country.UserArticle);
+            }
+        }
+        CommentApi.GetCountryComments(country.ID).then(comments=>{
+            if(comments.length==0){
+                div.append("<h3>אין תגובות</h3>");
+                return;
+            }
+            let list=document.createElement("ol");
+            for(var comment of comments){
+                let item=document.createElement("li");
+                item.innerHTML=`${comment.UserName}:<br>${comment.Body}<br>`;
+                list.appendChild(item);
+            }
+            div.appendChild(list);
+        })
+    }
+    /**
+     * 
+     * @param {Country} country 
+     */
+    PopUpEditWindow(country){
+
     }
     /**
      * 

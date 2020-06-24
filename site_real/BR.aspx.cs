@@ -29,11 +29,12 @@ namespace site_real
             ulSubjects.InnerHtml = html;
             
             
-            if (Session["user_id"] == null) 
+            /*if (Session["user_id"] == null)
                 pnlUser.Visible = false;
             else // הגולש מחובר
-                linkLoginToPost.Visible = false;
+                linkLoginToPost.Visible = false;*/
         }
+        /*
         protected void OpenSubject_Click(object sender, EventArgs e)
         {
             if (Session["user_id"] == null) // הגולש אינו מחובר
@@ -41,12 +42,12 @@ namespace site_real
             else
             {
                 int user = (int)Session["user_id"];
-                string title = txtTitle.Text, content = txtContent.Text;
+                string title = Title.Text, content = TextBox2.Text;
                 DBHandler.Open();
                     int subject = DBHandler.OpenBugReport(title, content, user);
                     Response.Redirect("Subject.aspx?id=" + subject);
                 DBHandler.Close();
-                }
-        }
+            }
+        }*/
     }
 }

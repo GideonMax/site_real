@@ -90,6 +90,7 @@
     <Content Include="js\DBTextWC.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\ForumApi.js" />
     <Content Include="js\geocoding.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -8790,12 +8791,15 @@
     <Content Include="js\MapWC.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\Post.js" />
     <Content Include="js\test.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BR.aspx" />
     <Content Include="js\test.js" />
-    <Content Include="App_Data\Database.accdb" />
+    <Content Include="App_Data\Database.accdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="css\interactive.css" />
     <Content Include="css\join.css" />
     <Content Include="css\login.css" />
@@ -8874,6 +8878,7 @@
       <DependentUpon>main.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="requests\CountryForumHandler.cs" />
     <Compile Include="requests\CountryInfoHandler.cs" />
     <Compile Include="requests\TextRequestHandler.cs" />
     <Compile Include="Subject.aspx.cs">
@@ -11407,6 +11412,9 @@
     <Content Include="js\Maps\Charts\node_modules\yargs\LICENSE" />
     <Content Include="js\Maps\Charts\node_modules\yargs\package.json" />
     <Content Include="js\Maps\Charts\node_modules\yargs\README.md" />
+    <Content Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </Content>
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
