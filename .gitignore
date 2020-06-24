@@ -57,3 +57,4 @@ bld/
 #bower_components/
 
 # RIA/Silverlight projects
+site_real/App_Data/Database.accdb
