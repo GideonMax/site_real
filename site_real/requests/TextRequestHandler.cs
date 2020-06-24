@@ -17,7 +17,6 @@ namespace site_real
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage message, CancellationToken token)
         {
             HttpResponseMessage response = new HttpResponseMessage();
-
             var parsedUri = message.RequestUri.LocalPath.Split('/');
             string TextName = parsedUri[2];
             if (message.Method.Method == "GET")

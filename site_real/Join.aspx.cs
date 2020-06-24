@@ -35,7 +35,7 @@ namespace site_real
                         Session["is_admin"] = is_admin;
                     }
                 DBHandler.Close();
-                Response.Redirect("/Default.aspx");
+                Response.Redirect(".");
             }
         }
         public void Unnamed_CheckedChanged(object sender, EventArgs e)
