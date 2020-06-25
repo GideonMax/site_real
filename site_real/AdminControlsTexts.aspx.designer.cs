@@ -7,36 +7,47 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace site_real {
-    
-    
-    public partial class SubmitBugReport {
-        
+namespace site_real
+{
+
+
+    public partial class AdminControlsTexts
+    {
+
         /// <summary>
-        /// ReportTitle control.
+        /// TextNames control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox ReportTitle;
-        
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl TextNames;
+
         /// <summary>
-        /// Body control.
+        /// TextDisplay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Body;
-        
+        protected global::System.Web.UI.WebControls.Literal TextDisplay;
+
         /// <summary>
-        /// Submit control.
+        /// name control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Submit;
+        protected global::System.Web.UI.WebControls.TextBox name;
+
+        /// <summary>
+        /// Text control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox Text;
     }
 }

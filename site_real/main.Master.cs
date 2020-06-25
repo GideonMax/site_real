@@ -18,6 +18,7 @@ namespace site_real
                 LogoutLink.Visible = true;
                 if((bool)Session["is_admin"])
                 {
+                    AdminControlsLink.Visible = true;
                     GreetingLabel.Text = "ברוך הבא אדמין " + Session["user_name"];
                 }
                 else

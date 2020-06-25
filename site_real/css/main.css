@@ -23,6 +23,11 @@ nav li a:hover {
     color: black;
     box-shadow: 2px 2px 6px 1px black inset;
 }
+form {
+    align-self: stretch;
+    text-align: center;
+    background-color: lightskyblue;
+}
 
 body {
     margin-left: 10%;

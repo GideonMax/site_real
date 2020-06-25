@@ -1,17 +1,3 @@
-﻿div.buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-}
-
-.article {
-    align-self: stretch;
-    text-align: center;
-}
-
-form {
-    align-self: stretch;
-    text-align: center;
+﻿form {
     background-attachment: fixed;
-    background-color: lightskyblue;
 }

@@ -12,27 +12,29 @@
 </head>
 <body dir="rtl">
     <form id="main" runat="server">
-    <h1>World Viewer</h1> <asp:HyperLink ID="AdminControlsLink" Visible="false" NavigateUrl="~/AdminControls.aspx" runat="server" />
-    <nav>
-        <ul>
-            <li><a href="Default.aspx">דף ראשי</a></li>
-            <li>
-		        <asp:HyperLink ID="LoginLink" runat="server" Text="התחבר לאתר" NavigateUrl="~/Login.aspx" />
-		        <asp:Label ID="GreetingLabel" runat="server" />
-            </li>
-            <li>
-                <asp:LinkButton ID="LogoutLink" Text="התנתק מהאתר" Visible="false" runat="server" OnClick="Logout" />
-                <asp:HyperLink ID="JoinLink" runat="server" Text="הרשמה לאתר" NavigateUrl="~/Join.aspx" />
-            </li>
-            <li>
-                <asp:HyperLink Text="World Viewer" NavigateUrl="~/interactive.aspx" runat="server" />
-            </li>
-        </ul>
-    </nav>
-    <div>
-        <asp:ContentPlaceHolder ID="Body" runat="server">
-        </asp:ContentPlaceHolder>
-    </div>
+
+        <h1>World Viewer</h1>
+        <asp:HyperLink ID="AdminControlsLink" Visible="false" Text="To admin controls" NavigateUrl="~/AdminControlsMain.aspx" runat="server" />
+        <nav>
+            <ul>
+                <li><a href="Default.aspx">דף ראשי</a></li>
+                <li>
+                    <asp:HyperLink ID="LoginLink" runat="server" Text="התחבר לאתר" NavigateUrl="~/Login.aspx" />
+                    <asp:Label ID="GreetingLabel" runat="server" />
+                </li>
+                <li>
+                    <asp:LinkButton ID="LogoutLink" Text="התנתק מהאתר" Visible="false" runat="server" OnClick="Logout" />
+                    <asp:HyperLink ID="JoinLink" runat="server" Text="הרשמה לאתר" NavigateUrl="~/Join.aspx" />
+                </li>
+                <li>
+                    <asp:HyperLink Text="World Viewer" NavigateUrl="~/interactive.aspx" runat="server" />
+                </li>
+            </ul>
+        </nav>
+        <div>
+            <asp:ContentPlaceHolder ID="Body" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
     </form>
 </body>
 </html>

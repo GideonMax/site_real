@@ -183,7 +183,24 @@ namespace site_real
             }
         }
 
-
+        public static DataPair[] GetAllDataPairs()
+        {
+            List<DataPair> ret = new List<DataPair>();
+            string command = "SELECT [ID],[key],[value] FROM [Data]";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            using( DbDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    DataPair pair = new DataPair();
+                    pair.ID = (int)reader["ID"];
+                    pair.Key = (string)reader["key"];
+                    pair.value = (string)reader["value"];
+                    ret.Add(pair);
+                }
+            }
+            return ret.ToArray();
+        }
         public static bool DoesDataKeyExist(string key)
         {
 
@@ -206,7 +223,7 @@ namespace site_real
         /// </summary>
         /// <param name="key">the key</param>
         /// <returns>the requested data</returns>
-        static string GetData(string key)
+        public static string GetData(string key)
         {
             if (!DoesDataKeyExist(key)) return null;
             string command = "SELECT [value] FROM [Data] WHERE [key]=@key";
@@ -228,9 +245,9 @@ namespace site_real
         /// </summary>
         /// <param name="key">The key</param>
         /// <param name="value">The value</param>
-        static void SetData(string key, string value)
+        public static void SetData(string key, string value)
         {
-            if (DoesDataKeyExist(key))
+            if (!DoesDataKeyExist(key))
             {
                 AddData(key, value);
             }
@@ -246,7 +263,7 @@ namespace site_real
         /// </summary>
         /// <param name="key">the pair's key</param>
         /// <param name="value">the pair's value</param>
-        static void AddData(string key, string value)
+        public static void AddData(string key, string value)
         {
             string command = "INSERT INTO [Data] ([key],[value]) VALUES(@key,@value)";
             OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -264,7 +281,7 @@ namespace site_real
         /// <code>CountryInfo America = db.Countries["US"];</code><br></br>
         /// <code>db.Countries["ILS"] = SomeFunctionOrSomethingThatReturnsACountryInfo();;</code>
         /// </summary>
-        static public IndexedProperty<string, CountryInfo> Countries
+        public static IndexedProperty<string, CountryInfo> Countries
         {
             get
             {
@@ -274,7 +291,27 @@ namespace site_real
                     );
             }
         }
-
+        /*
+        public static CountryInfo[] GetAllCountries()
+        {
+            List<CountryInfo> ret = new List<CountryInfo>();
+            string command = "SELECT [ID],[article],[user_article],[country_name] FROM [countries]";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    CountryInfo info = new CountryInfo();
+                    info.OfficialArticle = reader["article"].ToString().Replace("\n", "<br>");
+                    info.UserArticle = reader["user_article"].ToString().Replace("\n", "<br>");
+                    info.CountryName = reader["country_name"].ToString();
+                    info.ID = (int)reader["ID"];
+                    ret.Add(info);
+                }
+            }
+            cmd.Dispose();
+            return ret.ToArray();
+        }*/
 
         public static bool DoesCountryExist(string code)
         {
@@ -505,7 +542,7 @@ namespace site_real
                 " FROM [CountryForums] AS C" +
                 " INNER JOIN [Users] AS U ON C.[UserID]=U.[ID]" +
                 " WHERE [is_active] AND [CountryID]=@Country AND [Exists]" +
-                " ORDER BY [CreationDate] ASC";
+                " ORDER BY [CreationDate] DESC";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@Country", Country);
             List<Comment> ret = new List<Comment>();
@@ -546,9 +583,9 @@ namespace site_real
 
         public static bool DoesTextExist(string key)
         {
-            string command = "SELECT COUNT(*) AS [amount] FROM [Texts] WHERE [key]=@Key;";
+            string command = "SELECT COUNT(*) AS [amount] FROM [Texts] WHERE [key]=?;";
             OleDbCommand cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("@Key", key);
+            cmd.Parameters.AddWithValue("", key);
             bool ret = false;
             using (DbDataReader reader = cmd.ExecuteReader())
             {
@@ -560,7 +597,23 @@ namespace site_real
             cmd.Dispose();
             return ret;
         }
-
+        public static string[] GetAllTextNames()
+        {
+            List<string> ret = new List<string>();
+            string command = "SELECT [key] FROM [Texts]";
+            OleDbCommand cmd = new OleDbCommand(command, Con);
+            
+            using (OleDbDataReader reader = cmd.ExecuteReader())
+            {
+                while(reader.Read())
+                {
+                    
+                    ret.Add((string)reader["key"]);
+                }
+            }
+            cmd.Dispose();
+            return ret.ToArray();
+        }
         public static string GetText(string key)
         {
             if (!DoesTextExist(key)) return null;
@@ -659,5 +712,11 @@ namespace site_real
         public int UserId;
         public string UserName;
         public string Body;
+    }
+    public class DataPair
+    {
+        public int ID;
+        public string Key;
+        public string value;
     }
 }
