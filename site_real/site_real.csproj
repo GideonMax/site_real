@@ -82,6 +82,7 @@
   <ItemGroup>
     <Content Include="AdminControls.aspx" />
     <Content Include="css\Map.css" />
+    <Content Include="IMAGE UN\Flag_of_the_United_Nations.png" />
     <Content Include="js\countryData.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
