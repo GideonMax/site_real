@@ -27,7 +27,7 @@ namespace site_real
                     Session["user_name"] = u_name.Text;
                     Session["is_admin"] = DBHandler.IsAdmin(a);
                     DBHandler.Close();
-                Response.Redirect(".");
+                    Response.Redirect(".");
                 }
             DBHandler.Close();
         }

@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/main.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="site_real.Login1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-     <link type="text/css" href="css/login.css" rel="stylesheet" />
+     <!--<link type="text/css" href="css/login.css" rel="stylesheet" />-->
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
     <h1>כניסה לאתר</h1>

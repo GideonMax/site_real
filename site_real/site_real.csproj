@@ -80,7 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AdminControls.aspx" />
+    <Content Include="AdminControlsDataPoints.aspx" />
+    <Content Include="AdminControlsMain.aspx" />
+    <Content Include="AdminControlsTexts.aspx" />
     <Content Include="css\Map.css" />
     <Content Include="js\countryData.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -8819,12 +8821,26 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdminControls.aspx.cs">
-      <DependentUpon>AdminControls.aspx</DependentUpon>
+    <Compile Include="AdminControlsDataPoints.aspx.cs">
+      <DependentUpon>AdminControlsDataPoints.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AdminControls.aspx.designer.cs">
-      <DependentUpon>AdminControls.aspx</DependentUpon>
+    <Compile Include="AdminControlsDataPoints.aspx.designer.cs">
+      <DependentUpon>AdminControlsDataPoints.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminControlsMain.aspx.cs">
+      <DependentUpon>AdminControlsMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminControlsMain.aspx.designer.cs">
+      <DependentUpon>AdminControlsMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminControlsTexts.aspx.cs">
+      <DependentUpon>AdminControlsTexts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminControlsTexts.aspx.designer.cs">
+      <DependentUpon>AdminControlsTexts.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Code\DBHandler.cs" />
     <Compile Include="App_Code\IndexedProperty.cs" />

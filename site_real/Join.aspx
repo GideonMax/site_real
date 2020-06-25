@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/main.Master" AutoEventWireup="true" CodeBehind="Join.aspx.cs" Inherits="site_real.Login" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link type="text/css" href="css/join.css" rel="stylesheet" />
+    <!--<link type="text/css" href="css/join.css" rel="stylesheet" />-->
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
     <h1>הצטרף לאתר שלנו</h1>
