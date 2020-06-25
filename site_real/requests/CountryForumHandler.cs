@@ -23,11 +23,12 @@ namespace site_real
                 DBHandler.Open();
                 Comment[] comments = DBHandler.GetCountryComments(id);
                 Content = new StringContent(JsonConvert.SerializeObject(comments));
-                Content.Headers.ContentType.MediaType = "application/json"; 
+                Content.Headers.ContentType.MediaType = "application/json";
                 response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = Content
                 };
+                DBHandler.Close();
             }
             else
             {

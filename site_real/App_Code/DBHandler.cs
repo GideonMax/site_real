@@ -317,9 +317,9 @@ namespace site_real
             if (!DoesCountryExist(code))
             {
                 AddCountryInfoByCode(code, info);
-                return;
+                //return;
             }
-            if (info.IsAdminRequest&&info.CountryName!=null)
+            if (info.IsAdminRequest)
             {
                 string command = "UPDATE [countries] SET [country_name]=@Name WHERE [code]=@Code;";
                 OleDbCommand cmd = new OleDbCommand(command, Con);
@@ -339,10 +339,12 @@ namespace site_real
             }
             if (info.UserArticle != null)
             {
-                string command = "UPDATE [countries] SET [user_article]=@Article WHERE [code]=@Code;";
+                string command = "UPDATE [countries] " +
+                    "SET [user_article]=@Article " +
+                    "WHERE [code]= @CountryCode";
                 OleDbCommand cmd = new OleDbCommand(command, Con);
-                cmd.Parameters.AddWithValue("@Code", code);
-                cmd.Parameters.AddWithValue("@Article", info.OfficialArticle);
+                cmd.Parameters.AddWithValue("@Article", info.UserArticle);
+                cmd.Parameters.AddWithValue("@CountryCode", code);
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
             }
@@ -351,13 +353,11 @@ namespace site_real
         }
         static void AddCountryInfoByCode(string code, CountryInfo info)
         {
-            string command = "INSERT INTO [countries] ([code],[country_name],[article],[user_article])" +
-                " VALUES (@Code,@Name,@Article,@UserArticle);";
+            string command = "INSERT INTO [countries] ([code],[country_name])" +
+                " VALUES (@Code,@Name);";
             OleDbCommand cmd = new OleDbCommand(command, Con);
             cmd.Parameters.AddWithValue("@Code", code);
             cmd.Parameters.AddWithValue("@Name",info.CountryName);
-            cmd.Parameters.AddWithValue("@Article", info.OfficialArticle);
-            cmd.Parameters.AddWithValue("@UserArticle", info.UserArticle);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             return;

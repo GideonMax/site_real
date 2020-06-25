@@ -29,7 +29,8 @@ function AddNewComment(comment){
  * @param {string} Body 
  */
 function BuildAndAddComment(Country,UserID,Body){
-    let comment={Country:Country,UserID:UserID,Body:Body};
+    let comment = { Country: Country, UserID: UserID, Body: Body };
+    console.log(comment);
     return AddNewComment(comment);
 }
 /**
