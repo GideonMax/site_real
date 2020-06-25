@@ -9,4 +9,6 @@
     <db-div TextName="main"></db-div>
     <br />
     <img id="home" src="https://media.giphy.com/media/l1KVcrdl7rJpFnY2s/giphy.gif">
+    <br />
+    <a href="https://drive.google.com/file/d/1JyRfGyKg0bYNYcM17faH9OdLmIOKLkUA/view?usp=sharing">מצגת</a>
 </asp:Content>

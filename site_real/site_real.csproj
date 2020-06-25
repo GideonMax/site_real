@@ -82,6 +82,7 @@
   <ItemGroup>
     <Content Include="AdminControlsDataPoints.aspx" />
     <Content Include="AdminControlsMain.aspx" />
+    <Content Include="AdminControlsMap.aspx" />
     <Content Include="AdminControlsTexts.aspx" />
     <Content Include="css\Map.css" />
     <Content Include="js\countryData.js">
@@ -97,7 +98,6 @@
     <Content Include="js\geocoding.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="js\IDTest.js" />
     <Content Include="js\Maps\Charts\internal\canvg\index.js" />
     <Content Include="js\Maps\Charts\internal\charts\axes\Axis.js" />
     <Content Include="js\Maps\Charts\internal\charts\axes\AxisBreak.js" />
@@ -8795,6 +8795,7 @@
     <Content Include="js\MapWC.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\MapWCAdmin.js" />
     <Content Include="js\Post.js" />
     <Content Include="App_Data\Database.accdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8831,6 +8832,13 @@
     </Compile>
     <Compile Include="AdminControlsMain.aspx.designer.cs">
       <DependentUpon>AdminControlsMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminControlsMap.aspx.cs">
+      <DependentUpon>AdminControlsMap.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminControlsMap.aspx.designer.cs">
+      <DependentUpon>AdminControlsMap.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminControlsTexts.aspx.cs">
       <DependentUpon>AdminControlsTexts.aspx</DependentUpon>
