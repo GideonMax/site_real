@@ -360,17 +360,17 @@ namespace site_real
             {
                 string command = "UPDATE [countries] SET [country_name]=@Name WHERE [code]=@Code;";
                 OleDbCommand cmd = new OleDbCommand(command, Con);
-                cmd.Parameters.AddWithValue("@Code", code);
                 cmd.Parameters.AddWithValue("@Name", info.CountryName);
+                cmd.Parameters.AddWithValue("@Code", code);
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
             }
             if (info.OfficialArticle != null)
             {
-                string command = "UPDATE [countries] SET [article]=@Article WHERE [code]=@Code;";
+                string command = "UPDATE [countries] SET [article]=? WHERE [code]=?;";
                 OleDbCommand cmd = new OleDbCommand(command, Con);
-                cmd.Parameters.AddWithValue("@Code", code);
-                cmd.Parameters.AddWithValue("@Article", info.OfficialArticle);
+                cmd.Parameters.AddWithValue("", info.OfficialArticle);
+                cmd.Parameters.AddWithValue("", code);
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
             }

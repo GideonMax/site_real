@@ -9,7 +9,8 @@
             <li>
                 <a href="AdminControlsTexts.aspx">To text controls</a>
             </li>
-            <li>TODO MAP
+            <li>
+                <a href="AdminControlsMap.aspx">To map controls</a>
             </li>
         </ul>
 </asp:Content>
