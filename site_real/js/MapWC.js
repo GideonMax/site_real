@@ -168,15 +168,17 @@ class MapElement extends HTMLElement {
         else {
             console.log("this happened");
             this.editWindow.appendChild(this.TitleBox);
+            this.TitleBox.dir = "rtl";
             this.editWindow.appendChild(document.createElement("br"));
         }
-        this.textbox.rows = 40;
-        this.textbox.cols = 100;
+        this.textbox.rows = 25;
+        this.textbox.cols = 75;
         this.textbox.dir = "rtl";
         let submitButton = document.createElement("button");
         submitButton.setAttribute("onclick", "SubmitArticleChange()");
         submitButton.innerText = "שלח שינוי";
         this.editWindow.appendChild(this.textbox);
+        this.editWindow.appendChild(document.createElement("br"));
         this.editWindow.appendChild(submitButton);
         this.articleDiv.appendChild(this.editWindow);
     }
@@ -197,13 +199,17 @@ class MapElement extends HTMLElement {
             this.country.CountryName = this.TitleBox.value;
         }
         setCountryData(this.country.code, this.country).then(() => {
-
+            console.log("reseting");
             this.editWindow.innerHTML = "";
             this.editWindow.remove();
 
             this.articleDiv.innerHTML = "";
             this.articleDiv.remove();
-            this.showCountry(this.country);
+            getCountryData(this.country.code).then(c => {
+                this.country = c;
+                this.showCountry(this.country);
+
+            })
         })
     }
 }
