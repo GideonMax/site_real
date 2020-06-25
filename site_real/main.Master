@@ -14,7 +14,7 @@
     <form id="main" runat="server">
 
         <h1>World Viewer</h1>
-        <asp:HyperLink ID="AdminControlsLink" Visible="false" Text="To admin controls" NavigateUrl="~/AdminControlsMain.aspx" runat="server" />
+        <asp:HyperLink ID="AdminControlsLink" Visible="false" Text="לאזור האדמינים" NavigateUrl="~/AdminControlsMain.aspx" runat="server" />
         <nav>
             <ul>
                 <li><a href="Default.aspx">דף ראשי</a></li>
