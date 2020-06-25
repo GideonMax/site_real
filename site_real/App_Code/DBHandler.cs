@@ -97,7 +97,7 @@ namespace site_real
                 {
                     byte[] hash = Hash(password, (byte[])reader["salt"]);
                     if(CompareByteArrays(hash,(byte[])reader["hash"]))
-                    ret = (int)reader["ID"];
+                        ret = (int)reader["ID"];
                 }
             }
             command.Dispose();
@@ -134,7 +134,7 @@ namespace site_real
             return ret;
         }
         /// <summary>
-        /// Adds a new user to the database, and returns their ID;
+        /// Adds a new user to the database, and returns their ID
         /// </summary>
         /// <param name="name">The user's name</param>
         /// <param name="password">The user's password</param>
@@ -164,28 +164,6 @@ namespace site_real
             cmd.Dispose();
             return ret;
         }
-        /*
-        /// <summary>
-        /// Checks if a password already exists, returns true if it does and false if it does not.
-        /// </summary>
-        /// <param name="password">The password to check</param>
-        /// <returns>Does the password already exist</returns>
-        public static bool CheckPassword(string password)
-        {
-            string command = "SELECT COUNT(*) AS [amount] FROM [Users] WHERE [user_password]=?;";
-            OleDbCommand cmd = new OleDbCommand(command, Con);
-            cmd.Parameters.AddWithValue("", password);
-            bool ret = false;
-            using (DbDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    ret = (int)reader["amount"] != 0;
-                }
-            }
-            cmd.Dispose();
-            return ret;
-        }*/
         #endregion
         #region data
         /// <summary>
@@ -541,6 +519,7 @@ namespace site_real
                     c.UserId = (int)Reader["UserID"];
                     c.UserName = (string)Reader["user_name"];
                     c.Body = (string)Reader["Body"];
+                    ret.Add(c);
                 }
             }
             cmd.Dispose();

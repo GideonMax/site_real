@@ -95,6 +95,7 @@
     <Content Include="js\geocoding.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\IDTest.js" />
     <Content Include="js\Maps\Charts\internal\canvg\index.js" />
     <Content Include="js\Maps\Charts\internal\charts\axes\Axis.js" />
     <Content Include="js\Maps\Charts\internal\charts\axes\AxisBreak.js" />

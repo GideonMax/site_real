@@ -20,7 +20,7 @@ function GetCountryComments(Country){
  * @param {Comment} comment 
  */
 function AddNewComment(comment){
-    Post(`forum/${comment.Country}`,comment);
+    return Post(`forum/${comment.Country}`,comment);
 }
 /**
  * 
@@ -30,6 +30,16 @@ function AddNewComment(comment){
  */
 function BuildAndAddComment(Country,UserID,Body){
     let comment={Country:Country,UserID:UserID,Body:Body};
-    AddNewComment(comment);
+    return AddNewComment(comment);
 }
-export{GetCountryComments,AddNewComment,BuildAndAddComment};
+/**
+ * @returns {Number} the user's ID, returns 0 if the user has not logged in
+ */
+function GetUserID(){
+    let Cookie=document.cookie;
+    Cookie=Cookie.replace(";","");
+    Cookie=Cookie.replace("ID=","");
+    Cookie=Cookie.replace(" ","");
+    return parseInt(Cookie);
+}
+export{GetUserID,GetCountryComments,AddNewComment,BuildAndAddComment};

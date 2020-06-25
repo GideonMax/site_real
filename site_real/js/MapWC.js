@@ -23,6 +23,7 @@ import * as CommentApi from './ForumApi.js';
 class MapElement extends HTMLElement {
     constructor() {
         super();
+        this.commentDiv=document.createElement("div");
         this.articleDiv=document.createElement("div");
         this.articleDiv.className="popup";
         this.attachShadow({ mode: 'open' });
@@ -35,9 +36,6 @@ class MapElement extends HTMLElement {
         this.mapDiv.style.height = "460px";
         this.shadowRoot.appendChild(this.mapDiv);
         this.SetUpMap();
-        this.exitButton=document.createElement("button");
-        this.exitButton.innerText="X";
-        this.exitButton.setAttribute("onclick","closeArticle()");
         /*this.exitButton.addEventListener("load",()=>{
             console.log("loaded");
             this.exitButton.addEventListener("click",(event) => {
@@ -56,7 +54,7 @@ class MapElement extends HTMLElement {
         this.series.useGeodata = true;
         this.polygonTemplate = this.series.mapPolygons.template;
         this.polygonTemplate.events.on("hit", (event) => {
-            this.articleDiv.childNodes.forEach(val=>val.remove());
+            this.articleDiv.innerHTML="";
             this.articleDiv.remove();
             this.map.zoomToMapObject(event.target);
             let coords = this.map.svgPointToGeo(event.svgPoint);
@@ -69,14 +67,10 @@ class MapElement extends HTMLElement {
      * @param {Country} country
      */
     showCountry(country) {
-        /*let exitButton = document.createElement("button");
+        let exitButton=document.createElement("button");
         exitButton.innerText="X";
-        exitButton.addEventListener("click",(event) => {
-            console.log("yes");
-            this.articleDiv.childNodes.forEach(val=>val.remove());
-            this.articleDiv.remove();
-        });*/
-        this.articleDiv.appendChild(this.exitButton);
+        exitButton.setAttribute("onclick","closeArticle()");
+        this.articleDiv.appendChild(exitButton);
         let editButton = document.createElement("button");
         editButton.innerText="ערוך";
         editButton.onclick = this.PopUpEditWindow(country);
@@ -87,6 +81,7 @@ class MapElement extends HTMLElement {
             this.articleDiv.appendChild(text);
         }
         else {
+            this.country=country;
             this.articleDiv.innerHTML+=`<h1>${country.CountryName}</h1>`;
             if (country.OfficialArticle && country.OfficialArticle != null) {
                 this.articleDiv.innerHTML+="<h2>ערך רשמי</h2>";
@@ -95,33 +90,60 @@ class MapElement extends HTMLElement {
             if (country.UserArticle && country.UserArticle != null) {
                 this.articleDiv.innerHTML+="<h2>ערך של משתמשי האתר</h2>";
                 this.articleDiv.innerHTML+=country.UserArticle;
-            } CommentApi.GetCountryComments(country.ID).then(comments => {
-                
-                if (comments.length == 0) {
-                    this.articleDiv.innerHTML+="<h3>אין תגובות</h3>";
-                    return;
-                }
-                let list = document.createElement("ol");
-                for (var comment of comments) {
-                    let item = document.createElement("li");
-                    item.innerHTML = `${comment.UserName}:<br>${comment.Body}<br>`;
-                    list.appendChild(item);
-                }
-                this.articleDiv.appendChild(list);
-            })
+            }
+            this.MakeCommentBox();
+            this.ShowComments();
         }
         this.shadowRoot.appendChild(this.articleDiv);
 
 
     }
-    connectedCallback(){
+    ShowComments(){
+        CommentApi.GetCountryComments(this.country.ID).then(comments => {
+            //clearing
+            this.commentDiv.innerHTML="";
+            this.commentDiv.remove();
+            if (comments.length == 0) {
+                console.log("here");
+                this.commentDiv.innerHTML+="<h3>אין תגובות</h3>";
+                return;
+            }
+            let list = document.createElement("ul");
+            for (var comment of comments) {
+                let item = document.createElement("li");
+                item.innerHTML = `<h5>${comment.UserName}:</h5><br>${comment.Body}<br>`;
+                list.appendChild(item);
+            }
+            this.commentDiv.appendChild(list);
+            this.articleDiv.appendChild(this.commentDiv);
+        })
+    }
+    MakeCommentBox(){
+        if(CommentApi.GetUserID()==0)return;
+        this.CommentArea=document.createElement("div");
+        this.CommentArea.innerHTML+=
+        `
+        <h3>הוסף תגובה</h3><br>
+        <textarea rows="5" cols="50"></textarea>
+        <button onclick="SendMapComment()">שלח תגובה</button>
+        `;
+        this.articleDiv.appendChild(this.CommentArea);
+    }
+    SendComment(){
+        console.log(this.CommentArea.querySelector("textarea").value);
+        CommentApi.
+        BuildAndAddComment(this.countryID,CommentApi.GetUserID(),this.CommentArea.querySelector("textarea").value)
+        .then(()=>{
+            this.CommentArea.querySelector("textarea").value="";
+            this.ShowComments();
+        });
     }
     /**
      * 
      * @param {Country} country 
      */
     PopUpEditWindow(country) {
-
+        
     }
     /**
      * 
@@ -139,4 +161,9 @@ function closeArticle(){
     map.articleDiv.remove();
 }
 window.closeArticle=closeArticle;
+function SendMapComment(){
+    let map=document.getElementById("map");
+    map.SendComment();
+}
+window.SendMapComment=SendMapComment;
 window.customElements.define("g-map", MapElement);
