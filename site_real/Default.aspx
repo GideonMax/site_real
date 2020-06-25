@@ -8,4 +8,5 @@
     <br />
     <db-div TextName="main"></db-div>
     <br />
+    <img id="home" src="https://media.giphy.com/media/l1KVcrdl7rJpFnY2s/giphy.gif">
 </asp:Content>
