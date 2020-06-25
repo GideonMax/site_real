@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminControls.aspx" />
+    <Content Include="css\Map.css" />
     <Content Include="js\countryData.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -94,6 +95,7 @@
     <Content Include="js\geocoding.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\IDTest.js" />
     <Content Include="js\Maps\Charts\internal\canvg\index.js" />
     <Content Include="js\Maps\Charts\internal\charts\axes\Axis.js" />
     <Content Include="js\Maps\Charts\internal\charts\axes\AxisBreak.js" />
@@ -8792,11 +8794,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="js\Post.js" />
-    <Content Include="js\test.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="BR.aspx" />
-    <Content Include="js\test.js" />
     <Content Include="App_Data\Database.accdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

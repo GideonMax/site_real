@@ -1,4 +1,6 @@
-﻿class DBTextdiv extends HTMLElement{
+﻿import GetText from './TextRequestApi.js';
+console.log(GetText);
+class DBTextdiv extends HTMLElement{
     static get observedAttributes(){
         return ['TextName'];
     }

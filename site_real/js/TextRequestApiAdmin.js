@@ -2,3 +2,4 @@
 function SetText(TextName,Text){
     return Post(`/text/${TextName}`,Text);
 }
+export default SetText;

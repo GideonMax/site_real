@@ -3,7 +3,7 @@
  * @typedef {Object} Country
  * @property {Number} ID
  * @property {String} code
- * @property {String} CountryName 
+ * @property {String} CountryName
  * @property {String} OfficialArticle 
  * @property {String} UserArticle 
  * @property {Boolean} exists

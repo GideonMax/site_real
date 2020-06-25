@@ -1,0 +1,19 @@
+.popup {
+    /*text-align: left;*/
+    overflow-y: auto;
+    height: 80%;
+    width: 75%;
+    position: fixed;
+    left: 11.25%;
+    /*margin-left: -100px;*/
+    top: 25%;
+    margin-top: -100px;
+    background-color: white;
+    border: 2px black solid;
+    padding: 1em;
+}
+ul li{
+    width: fit-content;
+    border: 1px solid black;
+    text-align: right;
+}

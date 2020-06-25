@@ -15,104 +15,232 @@ import { default as GeoData } from './Maps/geodata/worldHigh.js';
 //#endregion
 //#region MyOwnImports
 import GeoCode from './geocoding.js';
-import {getCountryData} from './countryData.js';
+import { getCountryData, setCountryData } from './countryData.js';
 import * as CommentApi from './ForumApi.js';
 //#endregion
 //const Maps=H;
 //let apiKey = "PMFoDa_dg5LnVM4X9dVHmZuzLg_haag5crYUoYoregg";
-console.log(Maps);
-console.log(MapsCore.create);
 class MapElement extends HTMLElement {
     constructor() {
         super();
+        this.commentDiv = document.createElement("div");
+        this.articleDiv = document.createElement("div");
+        this.articleDiv.className = "popup";
         this.attachShadow({ mode: 'open' });
-        this.div = document.createElement("div");
-        this.div.style.width = "100%";
-        this.div.style.height = "460px";
-        this.shadowRoot.appendChild(this.div);
+        let style = document.createElement("link");
+        style.rel = "stylesheet";
+        style.href = "/css/Map.css";
+        this.shadowRoot.appendChild(style);
+        this.mapDiv = document.createElement("div");
+        this.mapDiv.style.width = "100%";
+        this.mapDiv.style.height = "460px";
+        this.shadowRoot.appendChild(this.mapDiv);
         this.SetUpMap();
-        /*
-        this.isDragging=true;
-        this.platform = new Maps.service.Platform({
-            'apikey': apiKey
-        });
-        this.defaultLayers = this.platform.createDefaultLayers();
-        console.log(Maps);*/
+        /*this.exitButton.addEventListener("load",()=>{
+            console.log("loaded");
+            this.exitButton.addEventListener("click",(event) => {
+                console.log("yes");
+                this.articleDiv.childNodes.forEach(val=>val.remove());
+                this.articleDiv.remove();
+            });
+        })*/
     }
     SetUpMap() {
         MapsCore.useTheme(theme);
-        this.map = MapsCore.create(this.div, Maps.MapChart);
+        this.map = MapsCore.create(this.mapDiv, Maps.MapChart);
         this.map.geodata = GeoData;
         this.map.projection = new Maps.projections.Miller();
         this.series = this.map.series.push(new Maps.MapPolygonSeries());
         this.series.useGeodata = true;
         this.polygonTemplate = this.series.mapPolygons.template;
-        this.polygonTemplate.events.on("hit", (event)=>{
-            this.map.zoomToMapObject(event.target);
-            let coords=this.map.svgPointToGeo(event.svgPoint);
-            GeoCode(coords.latitude,coords.longitude).then(getCountryData).then(this.showCountry);
+        this.polygonTemplate.events.on("hit", (event) => {
+            this.onHit(event);
         });
-        this.series.exclude=["AQ"];
+        this.series.exclude = ["AQ"];
+    }
+    onHit(event) {
+        this.articleDiv.innerHTML = "";
+        this.articleDiv.remove();
+        this.map.zoomToMapObject(event.target);
+        let coords = this.map.svgPointToGeo(event.svgPoint);
+        GeoCode(coords.latitude, coords.longitude).then(getCountryData).then((country) => this.showCountry(country));
+
     }
     /**
      * 
      * @param {Country} country
      */
     showCountry(country) {
-        let div = document.createElement("div");
-        div.className="popup";
+        this.country = country;
         let exitButton = document.createElement("button");
-        exitButton.onclick=()=>{
-            div.remove();
-        };
-        div.appendChild(exitButton);
-        let editButton = document.createElement("button");
-        editButton.onclick=this.PopUpEditWindow(country);
-        div.appendChild(editButton);
-        if(!country.exists){
-            let text=document.createElement("div");
-            text.innerHTML="<h1>על המדינה הזאת אין לנו מידע</h1><br>אולי תוסיף?";
+        exitButton.innerText = "X";
+        exitButton.setAttribute("onclick", "closeArticle()");
+        this.articleDiv.appendChild(exitButton);
+        if (CommentApi.GetUserID() != 0) {
+            let editButton = document.createElement("button");
+            editButton.innerText = "ערוך";
+            editButton.setAttribute("onclick", "PopUpEditWindow()");
+            this.articleDiv.appendChild(editButton);
         }
-        else{
-            div.append(`<h1>${country.CountryName}</h1>`);
-            if(country.OfficialArticle&&country.OfficialArticle!=null){
-                div.append("<h2>ערך רשמי</h2>");
-                div.append(country.OfficialArticle);
-            }
-            if(country.UserArticle&&country.UserArticle!=null){
-                div.append("<h2>ערך של משתמשי האתר</h2>");
-                div.append(country.UserArticle);
-            }
+        if (!country.exists) {
+            let text = document.createElement("div");
+            text.innerHTML = "<h1>על המדינה הזאת אין לנו מידע</h1><br>אולי תוסיף?";
+            this.articleDiv.appendChild(text);
         }
-        CommentApi.GetCountryComments(country.ID).then(comments=>{
-            if(comments.length==0){
-                div.append("<h3>אין תגובות</h3>");
-                return;
+        else {
+            this.articleDiv.innerHTML += `<h1>${country.CountryName}</h1>`;
+            if (country.OfficialArticle && country.OfficialArticle != null) {
+                this.articleDiv.innerHTML += "<h2>ערך רשמי</h2>";
+                this.articleDiv.innerHTML += country.OfficialArticle;
             }
-            let list=document.createElement("ol");
-            for(var comment of comments){
-                let item=document.createElement("li");
-                item.innerHTML=`${comment.UserName}:<br>${comment.Body}<br>`;
-                list.appendChild(item);
+            if (country.UserArticle && country.UserArticle != null) {
+                this.articleDiv.innerHTML += "<h2>ערך של משתמשי האתר</h2>";
+                this.articleDiv.innerHTML += country.UserArticle;
             }
-            div.appendChild(list);
-        })
-    }
-    /**
-     * 
-     * @param {Country} country 
-     */
-    PopUpEditWindow(country){
+            this.MakeCommentBox();
+            this.ShowComments();
+        }
+        this.shadowRoot.appendChild(this.articleDiv);
+
 
     }
+    //#region comments
+    ShowComments() {
+        CommentApi.GetCountryComments(this.country.ID).then(comments => {
+            //clearing
+            this.commentDiv.innerHTML = "";
+            this.commentDiv.remove();
+            if (comments.length == 0) {
+                console.log("here");
+                this.commentDiv.innerHTML += "<h3>אין תגובות</h3>";
+                return;
+            }
+            let list = document.createElement("ul");
+            for (var comment of comments) {
+                let item = document.createElement("li");
+                item.innerHTML = `<h5>${comment.UserName}:</h5><br>${comment.Body}<br>`;
+                list.appendChild(item);
+            }
+            this.commentDiv.appendChild(list);
+            this.articleDiv.appendChild(this.commentDiv);
+        })
+    }
+    MakeCommentBox() {
+        if (CommentApi.GetUserID() == 0) return;
+        this.CommentArea = document.createElement("div");
+        this.CommentArea.innerHTML +=
+            `
+        <h3>הוסף תגובה</h3><br>
+        <textarea rows="5" cols="50"></textarea>
+        <button onclick="SendMapComment()">שלח תגובה</button>
+        `;
+        this.articleDiv.appendChild(this.CommentArea);
+    }
+    SendComment() {
+        CommentApi.
+            BuildAndAddComment(this.country.ID, CommentApi.GetUserID(), this.CommentArea.querySelector("textarea").value)
+            .then(() => {
+                this.CommentArea.querySelector("textarea").value = "";
+                this.ShowComments();
+            });
+    }
+    //#endregion
+    //#region edit
+    PopUpEditWindow() {
+        this.editWindow = document.createElement("div");
+        this.editWindow.className = "popup";
+        this.editWindow.dir = "ltr";
+
+        let exitButton = document.createElement("button");
+        exitButton.innerText = "X";
+        exitButton.setAttribute("onclick", "closeEdit()");
+        exitButton.style.position = "relative";
+        this.editWindow.appendChild(exitButton);
+        this.editWindow.innerHTML += "<br>";
+        let country = this.country;
+        this.textbox = document.createElement("textarea");
+        this.TitleBox = document.createElement("textarea");
+        this.TitleBox.rows = 1;
+        this.TitleBox.cols = 20;
+        if (country.exists) {
+            this.textbox.value = country.UserArticle;
+        }
+        else {
+            console.log("this happened");
+            this.editWindow.appendChild(this.TitleBox);
+            this.TitleBox.dir = "rtl";
+            this.editWindow.appendChild(document.createElement("br"));
+        }
+        this.textbox.rows = 25;
+        this.textbox.cols = 75;
+        this.textbox.dir = "rtl";
+        let submitButton = document.createElement("button");
+        submitButton.setAttribute("onclick", "SubmitArticleChange()");
+        submitButton.innerText = "שלח שינוי";
+        this.editWindow.appendChild(this.textbox);
+        this.editWindow.appendChild(document.createElement("br"));
+        this.editWindow.appendChild(submitButton);
+        this.articleDiv.appendChild(this.editWindow);
+    }
+    //#endregion
     /**
      * 
      * @param {Country} country
      * @returns {String} 
      */
-    countryToText(country) {
+    /*countryToText(country) {
         return (country.exists ? JSON.stringify(country) : `${country.code} has no data in the database`);
-    }
+    }*/
+    SubmitArticleChange() {
+        console.log(this.textbox.value);
+        this.country.UserArticle = this.textbox.value;
+        console.log(this.TitleBox.value);
+        if (this.TitleBox) {
+            this.country.CountryName = this.TitleBox.value;
+        }
+        setCountryData(this.country.code, this.country).then(() => {
+            console.log("reseting");
+            this.editWindow.innerHTML = "";
+            this.editWindow.remove();
 
+            this.articleDiv.innerHTML = "";
+            this.articleDiv.remove();
+            getCountryData(this.country.code).then(c => {
+                this.country = c;
+                this.showCountry(this.country);
+
+            })
+        })
+    }
 }
+function SubmitArticleChange() {
+    /**
+     * @type {MapElement}
+     */
+    let map = document.getElementById("map");
+    map.SubmitArticleChange();
+}
+window.SubmitArticleChange = SubmitArticleChange;
+function closeArticle() {
+    let map = document.getElementById("map");
+    map.articleDiv.innerHTML = "";
+    map.articleDiv.remove();
+}
+window.closeArticle = closeArticle;
+function closeEdit() {
+    let map = document.getElementById("map");
+    map.editWindow.innerHTML = "";
+    map.editWindow.remove();
+}
+window.closeEdit = closeEdit;
+function SendMapComment() {
+    let map = document.getElementById("map");
+    map.SendComment();
+}
+window.SendMapComment = SendMapComment;
+function PopUpEditWindow() {
+    let map = document.getElementById("map");
+    map.PopUpEditWindow();
+}
+window.PopUpEditWindow = PopUpEditWindow;
 window.customElements.define("g-map", MapElement);

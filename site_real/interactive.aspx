@@ -2,12 +2,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link type="text/css" href="/css/interactive.css" rel="stylesheet" />
     <script type="module" src="/js/MapWC.js"></script>
+    <script type="module" src="/js/IDtest.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
     <!--<div class="buttons">
         <asp:PlaceHolder runat="server" ID="buttons" />
     </div>-->
-    <g-map>
+    <g-map id="map">
 
     </g-map>
     <!--

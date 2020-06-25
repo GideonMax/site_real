@@ -11,24 +11,7 @@
 
 form {
     align-self: stretch;
-    /*text-align: center;*/
+    text-align: center;
     background-attachment: fixed;
     background-color: lightskyblue;
-}
-
-.map {
-
-}
-.popup {
-    /*text-align: left;*/
-    height: auto;
-    width: 75%;
-    position: fixed;
-    left: 50%;
-    margin-left: -100px;
-    top: 50%;
-    margin-top: -100px;
-    background-color: white;
-    border: 2px black solid;
-    padding: 1em;
 }
